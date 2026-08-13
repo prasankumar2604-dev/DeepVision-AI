@@ -2,70 +2,72 @@
 
 ### AI-Powered Deepfake Image Detection System
 
-DeepVision AI is a web-based deepfake image detection system developed using
-Deep Learning, TensorFlow, MobileNetV2, and Flask.
+DeepVision AI is a web-based **AI-powered deepfake image detection system** built using **Python, Flask, TensorFlow, and MobileNetV2**.
 
-The system analyzes uploaded face images and predicts whether the image is
-**REAL** or **FAKE**, along with a confidence score.
+The application allows users to upload facial images and uses a trained deep learning model to classify them as **REAL** or **FAKE**, along with a confidence score. User accounts and prediction history are managed using **SQLite**.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-- 🔍 AI-powered deepfake image detection
-- 🧠 MobileNetV2 deep learning model
-- ⚡ Real-time image prediction
-- 📊 Prediction confidence score
-- 👤 User registration and login
-- 🔐 User authentication
-- 🗃️ SQLite database
-- 📜 Prediction history
-- 🖥️ Responsive web interface
-- 📁 Image upload support
-- 📈 Model performance evaluation
-- 🧪 Test dataset evaluation
+* 🔍 AI-powered deepfake image detection
+* 🧠 MobileNetV2-based deep learning model
+* ⚡ Fast image prediction
+* 📊 Prediction confidence score
+* 👤 User registration and login
+* 🔐 Session-based authentication
+* 🗃️ SQLite database
+* 📜 Prediction history
+* 🖥️ Responsive web interface
+* 📁 Image upload support
+* 📈 Model performance evaluation
+* 🧪 Model and prediction testing
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Technology Stack
 
 ### Backend
 
-- Python
-- Flask
-- SQLite
+* Python
+* Flask
+* SQLite
 
-### Deep Learning
+### Artificial Intelligence & Machine Learning
 
-- TensorFlow
-- Keras
-- MobileNetV2
-- NumPy
-- Pillow
+* TensorFlow
+* Keras
+* MobileNetV2
+* NumPy
+* Pillow
+* Scikit-learn
+* Pandas
+* Matplotlib
 
 ### Frontend
 
-- HTML5
-- CSS3
-- JavaScript
+* HTML5
+* CSS3
+* JavaScript
 
-### Machine Learning / Evaluation
+### Development & Version Control
 
-- Scikit-learn
-- Pandas
-- Matplotlib
+* Git
+* GitHub
+* Python Virtual Environment
 
 ---
 
-## 🧠 AI Model
+## 🧠 Deep Learning Model
 
-DeepVision AI uses **MobileNetV2**, a lightweight convolutional neural
-network architecture for image classification.
+DeepVision AI uses **MobileNetV2**, a lightweight convolutional neural network architecture designed for efficient image classification.
 
-The model classifies facial images into two classes:
+The model was trained to classify facial images into two categories:
 
-- **Fake**
-- **Real**
+| Class   | Description                              |
+| ------- | ---------------------------------------- |
+| 🟢 Real | Authentic facial image                   |
+| 🔴 Fake | AI-generated or manipulated facial image |
 
 ### Model Input
 
@@ -75,119 +77,211 @@ Images are resized to:
 224 × 224 pixels
 ```
 
-MobileNetV2 preprocessing is then applied before the image is passed to the
-trained model.
+MobileNetV2 preprocessing is applied before the image is passed to the trained model.
+
+### Model File
+
+The trained model is stored in:
+
+```text
+model/deepvision_mobilenetv2_stage2_best.keras
+```
 
 ---
 
-## 📊 Model Performance
+# 📊 Model Performance
 
-The final model was evaluated using a separate test dataset containing
-**2,000 previously unseen images**.
+The final model was evaluated using a separate test dataset containing **2,000 previously unseen images**.
 
-| Metric | Score |
-|---|---:|
-| Test Images | 2,000 |
-| Accuracy | **90.85%** |
-| Precision | **89.93%** |
-| Recall | **92.00%** |
-| F1 Score | **90.95%** |
+| Metric      |     Result |
+| ----------- | ---------: |
+| Test Images |      2,000 |
+| Accuracy    | **90.85%** |
+| Precision   | **89.93%** |
+| Recall      | **92.00%** |
+| F1 Score    | **90.95%** |
 
 ### Confusion Matrix
 
 ```text
-                 Predicted
-                 Fake    Real
+                     Predicted
+                  Fake       Real
 
-Actual Fake       897     103
-Actual Real        80     920
+Actual Fake       897        103
+Actual Real        80        920
 ```
 
 ### Performance Summary
 
-- **Accuracy:** 90.85%
-- **Precision:** 89.93%
-- **Recall:** 92.00%
-- **F1 Score:** 90.95%
+* **Accuracy:** 90.85%
+* **Precision:** 89.93%
+* **Recall:** 92.00%
+* **F1 Score:** 90.95%
 
-These results show that the model performs well in distinguishing real and
-fake facial images on the evaluation dataset.
+The results indicate that the model can effectively distinguish between real and fake facial images on the evaluation dataset.
+
+> ⚠️ Model performance may vary when detecting deepfakes created using different generation techniques or datasets.
 
 ---
 
-## 📂 Project Structure
+# 🏗️ System Architecture
 
 ```text
-deepfake-detector/
-│
-├── database/
-│   └── deepvision.db
-│
-├── dataset/
-│   ├── train/
-│   ├── valid/
-│   └── test/
+                         ┌─────────────────┐
+                         │      User       │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │  Flask Web App  │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │  Image Upload   │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │ Image Processing│
+                         │   224 × 224     │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │   MobileNetV2   │
+                         │  Deep Learning  │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │    Prediction   │
+                         └────────┬────────┘
+                                  │
+                         ┌────────┴────────┐
+                         ▼                 ▼
+                      ┌───────┐        ┌───────┐
+                      │  FAKE │        │  REAL │
+                      └───┬───┘        └───┬───┘
+                          │                │
+                          └───────┬────────┘
+                                  ▼
+                         ┌─────────────────┐
+                         │ Confidence Score│
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │ Display Result  │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │ Prediction      │
+                         │ History / DB    │
+                         └─────────────────┘
+```
+
+---
+
+# 📂 Project Structure
+
+```text
+DeepVision-AI/
 │
 ├── model/
-│   ├── mobilenetv2_deepfake.keras
-│   └── plots/
+│   └── deepvision_mobilenetv2_stage2_best.keras
 │
 ├── static/
 │   ├── css/
-│   ├── images/
-│   └── uploads/
+│   │   ├── animation.css
+│   │   ├── dashboar.css
+│   │   ├── detect.css
+│   │   ├── history.css
+│   │   ├── login.css
+│   │   ├── navbar.css
+│   │   ├── responsive.css
+│   │   ├── result.css
+│   │   └── style.css
+│   │
+│   └── images/
+│       ├── ai-eye.png
+│       └── sample.png
 │
 ├── templates/
-│   ├── login.html
-│   ├── signup.html
+│   ├── base.html
 │   ├── dashboard.html
 │   ├── detect.html
+│   ├── history.html
+│   ├── index.html
+│   ├── landing_base.html
+│   ├── loading.html
+│   ├── login.html
 │   ├── result.html
-│   └── history.html
+│   └── signup.html
+│
+├── utils/
+│   ├── helper.py
+│   ├── metrics.py
+│   └── plots.py
 │
 ├── app.py
 ├── config.py
 ├── database.py
 ├── predict.py
 ├── train.py
+├── check_model.py
 ├── test_model.py
 ├── test_predict.py
 ├── test_saved_model.py
 ├── requirements.txt
+├── .gitignore
 └── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+# ⚙️ Installation
 
-### 1. Clone the repository
-
-```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-```
-
-### 2. Open the project directory
+## 1. Clone the Repository
 
 ```bash
-cd deepfake-detector
+git clone https://github.com/prasankumar2604-dev/DeepVision-AI.git
 ```
 
-### 3. Create a virtual environment
+## 2. Open the Project Directory
+
+```bash
+cd DeepVision-AI
+```
+
+## 3. Create a Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-### 4. Activate the virtual environment
+## 4. Activate the Virtual Environment
 
-#### Windows PowerShell
+### Windows PowerShell
 
 ```powershell
 venv\Scripts\Activate.ps1
 ```
 
-### 5. Install dependencies
+### Windows Command Prompt
+
+```cmd
+venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+## 5. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -195,7 +289,7 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Running the Application
+# ▶️ Running the Application
 
 Start the Flask application:
 
@@ -203,68 +297,63 @@ Start the Flask application:
 python app.py
 ```
 
-Open the following address in your browser:
+The application will be available at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
+Open the address in your browser.
+
 ---
 
-## 🔍 How DeepVision AI Works
+# 🔍 How DeepVision AI Works
+
+The detection pipeline follows these steps:
 
 ```text
-                User
-                 │
-                 ▼
-          Upload Image
-                 │
-                 ▼
-        Flask Web Application
-                 │
-                 ▼
-       Image Preprocessing
-          224 × 224
-                 │
-                 ▼
-           MobileNetV2
-                 │
-                 ▼
-            Prediction
-             /      \
-            /        \
-          Fake       Real
-            \        /
-             \      /
-              ▼    ▼
-          Confidence
-             Score
-                 │
-                 ▼
-          Display Result
-                 │
-                 ▼
-       Save Prediction History
+1. User uploads a facial image
+             ↓
+2. Flask receives the image
+             ↓
+3. Image is resized to 224 × 224
+             ↓
+4. MobileNetV2 preprocessing is applied
+             ↓
+5. Trained MobileNetV2 model processes the image
+             ↓
+6. Model generates prediction
+             ↓
+7. Prediction is classified as REAL or FAKE
+             ↓
+8. Confidence score is calculated
+             ↓
+9. Result is displayed to the user
+             ↓
+10. Prediction is stored in SQLite history
 ```
 
 ---
 
-## 🔐 User Authentication
+# 🔐 User Authentication
 
-DeepVision AI provides user authentication features including:
+DeepVision AI includes user authentication functionality.
 
-- User registration
-- Login
-- Logout
-- Session management
+Users can:
 
-User information and prediction history are stored in the SQLite database.
+* Create an account
+* Log in
+* Log out
+* Maintain an authenticated session
+* Access their prediction history
+
+User information and prediction records are stored in the SQLite database.
 
 ---
 
-## 🗃️ Database
+# 🗃️ Database
 
-DeepVision AI uses SQLite to store application and prediction information.
+DeepVision AI uses **SQLite** for local application data storage.
 
 ### Users Table
 
@@ -289,12 +378,13 @@ predictions
 └── created_at
 ```
 
+Prediction records are associated with individual users through `user_id`.
+
 ---
 
-## 🧪 Testing
+# 🧪 Testing
 
-The project includes testing scripts for checking the trained model and
-prediction pipeline.
+The project includes scripts for testing the trained model and prediction pipeline.
 
 ### Test Model
 
@@ -314,59 +404,161 @@ python test_predict.py
 python test_saved_model.py
 ```
 
----
+### Model Diagnostic
 
-## ⚠️ Limitations
+```bash
+python check_model.py
+```
 
-DeepVision AI provides an AI-based prediction and should not be considered
-absolute proof that an image is real or fake.
-
-Performance can vary depending on:
-
-- Image quality
-- Face resolution
-- Image compression
-- Lighting conditions
-- Facial pose
-- Deepfake generation technique
-- Differences between training and real-world images
-
-The prediction should therefore be treated as **AI-assisted analysis**.
+The diagnostic script can be used to inspect model predictions and classification performance against the configured dataset.
 
 ---
 
-## 🔮 Future Enhancements
+# 🔒 Security & Data Handling
 
-Future versions of DeepVision AI could include:
+The repository is configured to prevent local and sensitive files from being committed.
 
-- 🎥 Video deepfake detection
-- 🎙️ Audio deepfake detection
-- ☁️ AWS/Azure cloud deployment
-- 📱 Mobile application
-- 🤖 Transformer-based deepfake detection
-- 📊 Advanced analytics dashboard
-- 🌐 REST API
-- 🔄 Continuous model improvement
-- ⚡ GPU-accelerated inference
+The `.gitignore` excludes:
 
----
+```text
+venv/
+__pycache__/
+dataset/
+*.zip
+static/uploads/*
+database/*.db
+.env
+*.log
+.DS_Store
+Thumbs.db
+```
 
-## 👨‍💻 Author
-
-**Prasan Kumar**
-
-BE – Computer Science and Engineering  
-APS College of Engineering  
-Expected Graduation: 2027
+This keeps local datasets, uploaded images, databases, virtual environments, and environment files out of version control.
 
 ---
 
-## 📜 License
+# ⚠️ Limitations
 
-This project is developed for educational and academic purposes.
+DeepVision AI provides an **AI-assisted prediction** and should not be considered absolute proof that an image is real or fake.
+
+Prediction performance can vary depending on:
+
+* Image quality
+* Face resolution
+* Image compression
+* Lighting conditions
+* Facial pose
+* Deepfake generation method
+* Dataset differences
+* Image preprocessing
+* Unseen manipulation techniques
+
+The system should therefore be treated as an **experimental deepfake detection tool**, not a definitive forensic system.
+
+---
+
+# 🔮 Future Development Roadmap
+
+The project can be extended with the following technologies and features:
+
+### ☁️ Cloud
+
+* AWS deployment
+* Azure deployment
+* Cloud-based model serving
+* Cloud database integration
+* Object storage for uploaded images
+
+### 🐳 DevOps
+
+* Docker containerization
+* Docker Compose
+* GitHub Actions
+* CI/CD pipeline
+* Automated testing
+* Container image management
+
+### 🤖 AI / Machine Learning
+
+* Video deepfake detection
+* Audio deepfake detection
+* Transformer-based detection
+* Improved model architectures
+* GPU-accelerated inference
+* Continuous model improvement
+
+### 🌐 Application
+
+* REST API
+* Advanced analytics dashboard
+* API authentication
+* Mobile application
+* Real-time monitoring
+* Improved scalability
+
+---
+
+# 🗺️ Project Roadmap
+
+```text
+DeepVision AI
+      │
+      ├── ✅ Flask Web Application
+      ├── ✅ MobileNetV2 Model
+      ├── ✅ Image Detection
+      ├── ✅ User Authentication
+      ├── ✅ SQLite Database
+      ├── ✅ Prediction History
+      ├── ✅ Model Evaluation
+      ├── ✅ GitHub Repository
+      │
+      ├── 🔜 Docker Containerization
+      ├── 🔜 CI/CD with GitHub Actions
+      ├── 🔜 AWS / Azure Deployment
+      ├── 🔜 REST API
+      ├── 🔜 Video Detection
+      └── 🔜 Production Deployment
+```
+
+---
+
+# 💻 GitHub
+
+Project Repository:
+
+**DeepVision AI**
+
+https://github.com/prasankumar2604-dev/DeepVision-AI
+
+---
+
+# 👨‍💻 Author
+
+### Prasan Kumar
+
+**BE – Computer Science and Engineering**
+
+APS College of Engineering
+Expected Graduation: **2027**
+
+Interested in:
+
+* ☁️ Cloud Computing
+* ⚙️ DevOps
+* 🤖 Artificial Intelligence
+* 🐍 Python
+* 🌐 Web Development
+
+---
+
+# 📜 License
+
+This project was developed for **educational and academic purposes**.
 
 ---
 
 # ⭐ DeepVision AI
 
 ### Detect • Analyze • Protect
+
+Built with ❤️ using Python, Flask, TensorFlow and MobileNetV2.
