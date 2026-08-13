@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="result-container">
+
+    <div class="result-card">
+
+        <div class="result-image">
+
+            <img src="{{ image_path }}" alt="Uploaded Image">
+
+        </div>
+
+        <div class="result-info">
+
+            <h1>🧠 AI Detection Result</h1>
+
+            {% if prediction == "Real" %}
+
+            <span class="result-label result-real">
+
+                ✅ REAL IMAGE
+
+            </span>
+
+            {% else %}
+
+            <span class="result-label result-fake">
+
+                ❌ FAKE IMAGE
+
+            </span>
+
+            {% endif %}
+
+            <div class="confidence-box">
+
+                <div class="confidence-title">
+
+                    Confidence : {{ confidence }}%
+
+                </div>
+
+                <div class="progress">
+
+                    <div class="progress-bar"
+
+                         style="width:{{ confidence }}%;">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p>
+
+                DeepVision AI analyzed facial features,
+
+                textures and image artifacts using
+
+                MobileNetV2 Deep Learning.
+
+            </p>
+
+            <div class="result-buttons">
+
+                <a href="/detect" class="btn">
+
+                    Analyze Another
+
+                </a>
+
+                <a href="/history" class="secondary-btn">
+
+                    View History
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

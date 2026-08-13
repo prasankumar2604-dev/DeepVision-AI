@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>DeepVision AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/detect.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animation.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+</head>
+
+<body>
+    <div class="animated-bg">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
+<div class="background-blur"></div>
+
+<header class="navbar">
+
+<div class="logo">
+
+    <div class="logo-icon">
+
+        <div class="core"></div>
+
+        <span class="node n1"></span>
+        <span class="node n2"></span>
+        <span class="node n3"></span>
+        <span class="node n4"></span>
+
+    </div>
+
+    <div class="logo-text">
+
+        <h2>DeepVision AI</h2>
+
+        <p>Deepfake Detection System</p>
+
+    </div>
+
+</div>
+
+<nav>
+
+<a href="/dashboard">
+<i class="fa-solid fa-house"></i>
+Dashboard
+</a>
+
+<a href="/detect">
+<i class="fa-solid fa-camera"></i>
+Detect
+</a>
+
+<a href="/history">
+<i class="fa-solid fa-clock-rotate-left"></i>
+History
+</a>
+
+<a href="/logout">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+<button id="theme-toggle" class="theme-btn">
+
+🌙
+
+</button>
+
+</nav>
+
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+<div class="flash-container">
+
+{% for category, message in messages %}
+
+<div class="flash {{category}}">
+{{message}}
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+{% endwith %}
+
+<div class="container">
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+<footer>
+
+DeepVision AI © 2026 |
+Developed by
+<b>Prasan Kumar</b>
+
+</footer>
+
+</body>
+<script>
+
+const toggle=document.getElementById("theme-toggle");
+
+const body=document.body;
+
+if(localStorage.getItem("theme")=="light"){
+
+body.classList.add("light-mode");
+
+toggle.innerHTML="☀️";
+
+}
+
+toggle.onclick=function(){
+
+body.classList.toggle("light-mode");
+
+if(body.classList.contains("light-mode")){
+
+localStorage.setItem("theme","light");
+
+toggle.innerHTML="☀️";
+
+}else{
+
+localStorage.setItem("theme","dark");
+
+toggle.innerHTML="🌙";
+
+}
+
+}
+
+</script>
+
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="history-container">
+
+    <div class="history-card">
+
+        <h1>📜 Detection History</h1>
+
+        {% if predictions %}
+
+        <table class="history-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>🖼 Image</th>
+
+                    <th>Prediction</th>
+
+                    <th>Confidence</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in predictions %}
+
+                <tr>
+
+                    <td>{{ item.image_name }}</td>
+
+                    <td>
+
+                        {% if item.prediction=="Real" %}
+
+                        <span class="badge-real">
+
+                            ✅ REAL
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge-fake">
+
+                            ❌ FAKE
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ item.confidence }}%</td>
+
+                    <td>{{ item.created_at }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-history">
+
+            <h1>📂</h1>
+
+            <h2>No Detection History</h2>
+
+            <p>
+
+                Start analyzing images and your history
+
+                will appear here.
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

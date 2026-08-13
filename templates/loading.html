@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="loading-container">
+
+    <div class="loading-card">
+
+        <div class="brain">
+
+            🧠
+
+        </div>
+
+        <h1>DeepVision AI</h1>
+
+        <p>Analyzing your image...</p>
+
+        <div class="loading-bar">
+
+            <div class="loading-progress"></div>
+
+        </div>
+
+        <div class="steps">
+
+            <p id="step">Initializing AI...</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const steps=[
+
+"✔ Detecting Face...",
+
+"✔ Extracting Features...",
+
+"✔ Texture Analysis...",
+
+"✔ Lighting Analysis...",
+
+"✔ Deep Learning Prediction...",
+
+"✔ Finalizing..."
+
+];
+
+let i=0;
+
+setInterval(()=>{
+
+if(i<steps.length){
+
+document.getElementById("step").innerHTML=steps[i];
+
+i++;
+
+}
+
+},800);
+
+setTimeout(()=>{
+
+window.location="{{ next_url }}";
+
+},5500);
+
+</script>
+
+{% endblock %}

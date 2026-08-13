@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <div class="hero-section">
+
+        <div>
+
+            <h1>Hello, {{ session.username }} 👋</h1>
+
+            <p>
+                Welcome back to <strong>DeepVision AI</strong>.
+                Detect deepfake images using AI-powered analysis.
+            </p>
+
+        </div>
+
+        <a href="/detect" class="primary-btn">
+            🚀 Start Detection
+        </a>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon">📁</div>
+            <h3>Total Predictions</h3>
+            <h2>{{ total_predictions }}</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🤖</div>
+            <h3>AI Model</h3>
+            <h2>MobileNetV2</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <h3>Dataset</h3>
+            <h2>100K+</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🟢</div>
+            <h3>Status</h3>
+            <h2>Online</h2>
+        </div>
+
+    </div>
+
+    <div class="dashboard-bottom">
+
+        <div class="activity-card">
+
+            <h2>Recent Activity</h2>
+
+            <p>Your prediction history will appear here.</p>
+
+            <a href="/history" class="secondary-btn">
+
+                View History →
+
+            </a>
+
+        </div>
+
+        <div class="activity-card">
+
+            <h2>System Status</h2>
+
+            <ul>
+
+                <li>🟢 AI Model Loaded</li>
+                
+                <li>🟢 Database Connected</li>
+                
+                <li>🟢 Flask Server Running</li>
+                
+                <li>🟢 Ready For Detection</li>
+                
+                <li>⚡ MobileNetV2 Active</li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

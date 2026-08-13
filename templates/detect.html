@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="detect-page">
+
+    <div class="detect-header">
+
+        <h1>🧠 AI Deepfake Detection</h1>
+
+        <p>
+            Upload an image and let DeepVision AI determine
+            whether it is <b>Real</b> or <b>AI Generated</b>.
+        </p>
+
+    </div>
+
+    <form
+        action="/predict"
+        method="POST"
+        enctype="multipart/form-data"
+        class="detect-form">
+
+        <label class="upload-area">
+
+            <input
+                type="file"
+                id="imageInput"
+                name="image"
+                accept="image/*"
+                required>
+
+            <div class="upload-content">
+
+                <div class="upload-icon">📤</div>
+
+                <h2>Drag & Drop Image</h2>
+
+                <p>or click to browse</p>
+
+            </div>
+
+        </label>
+        <div class="tips">
+
+    <h3>📌 Supported Formats</h3>
+
+    <p>
+
+        JPG • PNG • JPEG • WEBP
+
+    </p>
+
+</div>
+
+        <img
+            id="preview"
+            class="preview-image"
+            style="display:none;">
+
+        <button
+            class="detect-btn"
+            type="submit">
+
+            🧠 Analyze with DeepVision AI
+
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+const imageInput=document.getElementById("imageInput");
+
+const preview=document.getElementById("preview");
+
+imageInput.addEventListener("change",function(){
+
+    const file=this.files[0];
+
+    if(file){
+
+        preview.src=URL.createObjectURL(file);
+
+        preview.style.display="block";
+
+    }
+
+});
+
+</script>
+
+{% endblock %}
