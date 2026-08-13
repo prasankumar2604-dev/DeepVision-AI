@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Dataset
+dataset/
+
+# ZIP datasets
+*.zip
+
+# Uploaded images
+static/uploads/*
+
+# Local database
+database/*.db
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore

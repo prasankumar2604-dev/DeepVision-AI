@@ -22,6 +22,8 @@ from werkzeug.utils import secure_filename
 # Import AI Prediction Function
 from predict import predict_image
 
+# Import Database Initialization
+from database import create_database
 # ----------------------------------------------------
 # Flask App
 # ----------------------------------------------------
@@ -375,4 +377,11 @@ def history():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
+    create_database()
+
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )
