@@ -25,3 +25,10 @@ database/*.db
 
 # TensorFlow temporary files
 *.tmp
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
