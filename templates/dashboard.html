@@ -1,94 +1,240 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="dashboard-container animate-fade-up">
 
-<div class="dashboard-container">
+  <!-- Hero Welcome Banner -->
+  <section class="dashboard-hero">
+    <div class="hero-text-content">
+      <div class="hero-badge">
+        <span class="status-dot"></span>
+        <span>Neural Forensic Workspace</span>
+      </div>
+      <h1>Welcome back, <span>{{ session.username }}</span></h1>
+      <p>
+        Monitor deepfake detection analytics, analyze suspect facial imagery, and review real-time
+        MobileNetV2 neural inference metrics.
+      </p>
+    </div>
 
-    <div class="hero-section">
+    <div class="hero-cta">
+      <a href="{{ url_for('detect') }}" class="primary-btn">
+        <i class="fa-solid fa-bolt"></i>
+        <span>Start New Detection</span>
+      </a>
+    </div>
+  </section>
 
-        <div>
+  <!-- Real Database Statistics Grid -->
+  <section class="stats-grid">
+    <!-- Card 1: Total Predictions -->
+    <div class="stat-card delay-1 animate-fade-up">
+      <div class="stat-header">
+        <span class="stat-title">Total Analyses</span>
+        <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
+      </div>
+      <div class="stat-value gold">{{ total_predictions }}</div>
+      <div class="stat-footer">
+        <i class="fa-solid fa-circle-check" style="color: var(--gold-primary);"></i>
+        <span>Lifetime database records</span>
+      </div>
+    </div>
 
-            <h1>Hello, {{ session.username }} 👋</h1>
+    <!-- Card 2: Real Images Verified -->
+    <div class="stat-card delay-2 animate-fade-up">
+      <div class="stat-header">
+        <span class="stat-title">Authentic Images</span>
+        <div class="stat-icon" style="color: var(--status-real);"><i class="fa-solid fa-shield-halved"></i></div>
+      </div>
+      <div class="stat-value real">{{ real_count if real_count is defined else 0 }}</div>
+      <div class="stat-footer">
+        <span class="badge badge-real" style="padding: 0.15rem 0.6rem; font-size: 0.72rem;">Verified Real</span>
+      </div>
+    </div>
 
-            <p>
-                Welcome back to <strong>DeepVision AI</strong>.
-                Detect deepfake images using AI-powered analysis.
-            </p>
+    <!-- Card 3: Deepfakes Detected -->
+    <div class="stat-card delay-3 animate-fade-up">
+      <div class="stat-header">
+        <span class="stat-title">Deepfakes Flagged</span>
+        <div class="stat-icon" style="color: var(--status-fake);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      </div>
+      <div class="stat-value fake">{{ fake_count if fake_count is defined else 0 }}</div>
+      <div class="stat-footer">
+        <span class="badge badge-fake" style="padding: 0.15rem 0.6rem; font-size: 0.72rem;">Synthetic Detected</span>
+      </div>
+    </div>
 
-        </div>
+    <!-- Card 4: AI Engine Architecture -->
+    <div class="stat-card delay-4 animate-fade-up">
+      <div class="stat-header">
+        <span class="stat-title">Inference Engine</span>
+        <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+      </div>
+      <div class="stat-value" style="font-size: 1.55rem; color: var(--gold-highlight);">MobileNetV2</div>
+      <div class="stat-footer">
+        <i class="fa-solid fa-bolt" style="color: var(--status-real);"></i>
+        <span>224&times;224 RGB &bull; Stage 2</span>
+      </div>
+    </div>
+  </section>
 
-        <a href="/detect" class="primary-btn">
-            🚀 Start Detection
+  <!-- Genuine Analytics Distribution Ratio Bar (Only when data exists) -->
+  {% if total_predictions > 0 %}
+  {% set real_pct = ((real_count / total_predictions) * 100)|round(1) if total_predictions > 0 else 0 %}
+  {% set fake_pct = ((fake_count / total_predictions) * 100)|round(1) if total_predictions > 0 else 0 %}
+  <section class="analytics-overview-card delay-3 animate-fade-up">
+    <div class="analytics-header">
+      <div>
+        <div class="analytics-title">Forensic Verdict Distribution</div>
+        <div class="analytics-subtitle">Breakdown of authenticated vs synthetic images in your account</div>
+      </div>
+      <div class="badge badge-gold">{{ total_predictions }} total logged</div>
+    </div>
+
+    <div class="ratio-bar-wrapper">
+      <div class="ratio-bar">
+        <div class="ratio-segment-real" style="width: {{ real_pct }}%;" title="Authentic: {{ real_pct }}%"></div>
+        <div class="ratio-segment-fake" style="width: {{ fake_pct }}%;" title="Deepfake: {{ fake_pct }}%"></div>
+      </div>
+    </div>
+
+    <div class="ratio-legend">
+      <div class="legend-item">
+        <span class="legend-dot real"></span>
+        <span><b>Authentic:</b> {{ real_count }} ({{ real_pct }}%)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot fake"></span>
+        <span><b>Synthetic/Fake:</b> {{ fake_count }} ({{ fake_pct }}%)</span>
+      </div>
+      <div class="legend-item" style="margin-left: auto;">
+        <span style="color: var(--text-muted); font-size: 0.8rem;">Threshold: 0.5 Decision Boundary</span>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Dashboard Bottom: Recent Activity & System Status -->
+  <section class="dashboard-bottom delay-4 animate-fade-up">
+    <!-- Left Column: Recent Detections -->
+    <div class="dashboard-card">
+      <div class="card-top">
+        <h2>
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Recent Activity</span>
+        </h2>
+        {% if total_predictions > 0 %}
+        <a href="{{ url_for('history') }}" class="view-all-link">
+          <span>View All ({{ total_predictions }})</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
+        {% endif %}
+      </div>
 
+      {% if recent_predictions and recent_predictions|length > 0 %}
+      <div class="recent-activity-list">
+        {% for item in recent_predictions %}
+        <div class="activity-row">
+          <div class="activity-info">
+            <div class="activity-icon">
+              <i class="fa-solid fa-file-image"></i>
+            </div>
+            <div class="activity-meta">
+              <span class="activity-filename" title="{{ item.image_name }}">{{ item.image_name }}</span>
+              <span class="activity-time">{{ item.created_at }}</span>
+            </div>
+          </div>
+
+          <div class="activity-status-box">
+            <span class="activity-conf">{{ item.confidence }}%</span>
+            {% if item.prediction == "Real" %}
+            <span class="badge badge-real">Real</span>
+            {% else %}
+            <span class="badge badge-fake">Fake</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="dashboard-empty-state">
+        <div class="empty-icon">
+          <i class="fa-solid fa-images"></i>
+        </div>
+        <h3>No detections recorded yet</h3>
+        <p>Upload a suspect portrait or image to evaluate biological consistency with MobileNetV2.</p>
+        <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.65rem 1.35rem; font-size: 0.9rem;">
+          <i class="fa-solid fa-crosshairs"></i>
+          <span>Run First Analysis</span>
+        </a>
+      </div>
+      {% endif %}
     </div>
 
-    <div class="stats-grid">
+    <!-- Right Column: System Status & Model Specifications -->
+    <div class="dashboard-card">
+      <div class="card-top">
+        <h2>
+          <i class="fa-solid fa-circle-nodes"></i>
+          <span>Engine Status</span>
+        </h2>
+        <span class="badge badge-gold">Active</span>
+      </div>
 
-        <div class="stat-card">
-            <div class="stat-icon">📁</div>
-            <h3>Total Predictions</h3>
-            <h2>{{ total_predictions }}</h2>
-        </div>
+      <ul class="system-status-list">
+        <li class="system-status-item">
+          <span class="status-label">
+            <span class="status-indicator"></span>
+            <span>AI Architecture</span>
+          </span>
+          <span class="status-value">MobileNetV2</span>
+        </li>
 
-        <div class="stat-card">
-            <div class="stat-icon">🤖</div>
-            <h3>AI Model</h3>
-            <h2>MobileNetV2</h2>
-        </div>
+        <li class="system-status-item">
+          <span class="status-label">
+            <span class="status-indicator"></span>
+            <span>Input Dimensions</span>
+          </span>
+          <span class="status-value">224 &times; 224 px</span>
+        </li>
 
-        <div class="stat-card">
-            <div class="stat-icon">📊</div>
-            <h3>Dataset</h3>
-            <h2>100K+</h2>
-        </div>
+        <li class="system-status-item">
+          <span class="status-label">
+            <span class="status-indicator"></span>
+            <span>Preprocessing</span>
+          </span>
+          <span class="status-value">Normalized [-1, 1]</span>
+        </li>
 
-        <div class="stat-card">
-            <div class="stat-icon">🟢</div>
-            <h3>Status</h3>
-            <h2>Online</h2>
-        </div>
+        <li class="system-status-item">
+          <span class="status-label">
+            <span class="status-indicator"></span>
+            <span>Backend Server</span>
+          </span>
+          <span class="status-value">Flask / Python 3</span>
+        </li>
 
+        <li class="system-status-item">
+          <span class="status-label">
+            <span class="status-indicator"></span>
+            <span>Audit Database</span>
+          </span>
+          <span class="status-value">SQLite Connected</span>
+        </li>
+      </ul>
+
+      <div class="quick-action-strip">
+        <a href="{{ url_for('detect') }}" class="btn-primary" style="justify-content: center; width: 100%;">
+          <i class="fa-solid fa-upload"></i>
+          <span>Upload Image for Analysis</span>
+        </a>
+        <a href="{{ url_for('history') }}" class="btn-secondary" style="justify-content: center; width: 100%;">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Audit Full History</span>
+        </a>
+      </div>
     </div>
-
-    <div class="dashboard-bottom">
-
-        <div class="activity-card">
-
-            <h2>Recent Activity</h2>
-
-            <p>Your prediction history will appear here.</p>
-
-            <a href="/history" class="secondary-btn">
-
-                View History →
-
-            </a>
-
-        </div>
-
-        <div class="activity-card">
-
-            <h2>System Status</h2>
-
-            <ul>
-
-                <li>🟢 AI Model Loaded</li>
-                
-                <li>🟢 Database Connected</li>
-                
-                <li>🟢 Flask Server Running</li>
-                
-                <li>🟢 Ready For Detection</li>
-                
-                <li>⚡ MobileNetV2 Active</li>
-
-            </ul>
-
-        </div>
-
-    </div>
+  </section>
 
 </div>
-
 {% endblock %}

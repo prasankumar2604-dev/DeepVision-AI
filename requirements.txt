@@ -1,9 +1,6 @@
-Flask
-tensorflow
-opencv-python
-numpy
-matplotlib
-scikit-learn
-pandas
-Pillow
-tqdm
+# Production runtime dependencies for DeepVision AI
+Flask>=3.0.0
+tensorflow-cpu>=2.15.0
+Pillow>=10.0.0
+numpy>=1.24.0
+gunicorn>=21.0.0

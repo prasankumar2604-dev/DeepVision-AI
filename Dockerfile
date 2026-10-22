@@ -1,38 +1,43 @@
-﻿# ==========================================================
-# DeepVision AI - Dockerfile
-# AI-Powered Deepfake Image Detection System
+# ==========================================================
+# DeepVision AI — Production Dockerfile
+# Optimized for free-tier cloud containers (Hugging Face / Render / Koyeb)
 # ==========================================================
 
 FROM python:3.11-slim
 
-# Prevent Python from creating .pyc files
-# and ensure logs appear immediately
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Prevent Python bytecode generation and ensure unbuffered stdout/stderr
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONUTF8=1 \
+    PORT=5000 \
+    FLASK_ENV=production
 
-# Set working directory
 WORKDIR /app
 
-# System dependencies required by OpenCV and TensorFlow
-RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
-    libgl1 \
+# Install minimal system dependencies required by TensorFlow CPU runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy dependency file first for Docker layer caching
+# Copy dependency list first for Docker layer caching
 COPY requirements.txt .
 
-# Install Python dependencies
+# Install production Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy application source code (excluding items in .dockerignore)
 COPY . .
 
-# Create required directories
-RUN mkdir -p database static/uploads model/plots
+# Ensure runtime directories exist and have open permissions for non-root container users (e.g. HuggingFace UID 1000)
+RUN mkdir -p database static/uploads model/plots && \
+    chmod -R 777 database static/uploads model/plots
 
-# Flask application port
+# Expose default application port
 EXPOSE 5000
 
-# Start DeepVision AI
-CMD ["python", "app.py"]
+# Container healthcheck using standard Python library
+HEALTHCHECK --interval=30s --timeout=10s --start-period=45s --retries=3 \
+    CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '5000'); urllib.request.urlopen(f'http://localhost:{port}/').read()" || exit 1
+
+# Production WSGI server using Gunicorn (1 worker + 4 threads to minimize RAM and prevent OOM on 512MB free tier)
+CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 4 --timeout 120 app:app"]

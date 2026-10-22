@@ -1,75 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="result-container animate-fade-up" style="max-width: 600px; padding: 4rem 1rem; text-align: center;">
 
-<div class="loading-container">
+  <div class="card" style="padding: 3.5rem 2.5rem; border-color: var(--border-gold-subtle);">
 
-    <div class="loading-card">
-
-        <div class="brain">
-
-            🧠
-
-        </div>
-
-        <h1>DeepVision AI</h1>
-
-        <p>Analyzing your image...</p>
-
-        <div class="loading-bar">
-
-            <div class="loading-progress"></div>
-
-        </div>
-
-        <div class="steps">
-
-            <p id="step">Initializing AI...</p>
-
-        </div>
-
+    <div class="auth-brand-emblem" style="width: 64px; height: 64px; margin: 0 auto 1.5rem;">
+      <div class="emblem-core" style="width: 22px; height: 22px;"></div>
     </div>
+
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">DeepVision <span>AI</span></h1>
+    <p style="margin-bottom: 2rem;">Forensic neural image analysis in progress...</p>
+
+    <!-- Progress Track -->
+    <div class="progress-track" style="height: 8px; margin-bottom: 1.5rem;">
+      <div class="progress-fill" style="width: 100%; background: var(--gold-gradient); animation: goldShimmer 2s infinite;"></div>
+    </div>
+
+    <div style="font-size: 0.92rem; font-weight: 600; color: var(--gold-highlight); min-height: 24px;">
+      <span id="step">Initializing MobileNetV2 Architecture...</span>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
-
-const steps=[
-
-"✔ Detecting Face...",
-
-"✔ Extracting Features...",
-
-"✔ Texture Analysis...",
-
-"✔ Lighting Analysis...",
-
-"✔ Deep Learning Prediction...",
-
-"✔ Finalizing..."
-
+const steps = [
+  "✔ Loading MobileNetV2 Weights...",
+  "✔ Normalizing Pixel Tensors [224, 224]...",
+  "✔ Extracting Multi-Scale Facial Features...",
+  "✔ Frequency Domain Texture Analysis...",
+  "✔ Evaluating Synthetic Landmark Seams...",
+  "✔ Compiling Forensic Confidence Score..."
 ];
 
-let i=0;
+let stepIdx = 0;
+const stepEl = document.getElementById("step");
+setInterval(() => {
+  if (stepIdx < steps.length && stepEl) {
+    stepEl.textContent = steps[stepIdx];
+    stepIdx++;
+  }
+}, 800);
 
-setInterval(()=>{
-
-if(i<steps.length){
-
-document.getElementById("step").innerHTML=steps[i];
-
-i++;
-
-}
-
-},800);
-
-setTimeout(()=>{
-
-window.location="{{ next_url }}";
-
-},5500);
-
+setTimeout(() => {
+  window.location = "{{ next_url if next_url is defined else url_for('dashboard') }}";
+}, 5200);
 </script>
-
 {% endblock %}

@@ -1,39 +1,57 @@
-# Git
-.git
+# ==========================================================
+# DeepVision AI — Docker Ignore Configuration
+# Prevents large datasets, cache, and local secrets from entering image
+# ==========================================================
+
+# Git metadata
+.git/
 .gitignore
+.github/
 
-# Virtual environment
+# Virtual Environment
 venv/
+env/
+ENV/
 
-# Python cache
+# Python Cache & Bytecode
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Dataset
+# Large Datasets & Archives (Crucial: train_100k.zip is ~2.8GB!)
 dataset/
-
-# ZIP datasets
+dataset_small/
 *.zip
+*.tar
+*.tar.gz
+*.rar
 
-# Uploaded images
-static/uploads/*
+# Training scripts, tests & evaluation plots
+train.py
+check_model.py
+test_*.py
+model/plots/
 
-# Local database
+# Local Database Files (Database data is managed via persistent volume mount)
 database/*.db
 
-# Environment variables
+# Local Uploads (Persisted via Docker volume)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Environment & Local Secrets
 .env
+.env.*
+*.env
 
-# Jupyter
-.ipynb_checkpoints/
-
-# Logs
-*.log
-
-# OS files
+# IDE & OS Files
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
 
-# Docker
-Dockerfile
-.dockerignore
+# Documentation & Scratch Files
+*.md
+!README.md
+scratch/

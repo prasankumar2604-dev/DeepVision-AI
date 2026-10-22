@@ -1,18 +1,30 @@
 import sqlite3
 import os
+import sys
 
-DB_PATH = os.path.join("database", "deepvision.db")
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+DB_PATH = os.environ.get("DATABASE_PATH", os.path.join("database", "deepvision.db"))
 
 
 def get_connection():
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def create_database():
-
-    os.makedirs("database", exist_ok=True)
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
 
     conn = get_connection()
     cursor = conn.cursor()

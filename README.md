@@ -1,3 +1,13 @@
+---
+title: DeepVision AI
+emoji: 👁️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 5000
+pinned: false
+---
+
 # 🧠 DeepVision AI
 
 ### AI-Powered Deepfake Image Detection System

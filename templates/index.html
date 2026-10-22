@@ -3,35 +3,36 @@
 {% block content %}
 
 <!-- ================= HERO ================= -->
-
-<section class="hero">
+<section class="hero animate-fade-up">
 
     <div class="hero-left">
 
         <div class="hero-tag">
-            🚀 Next Generation AI Security
+            <i class="fa-solid fa-shield-halved" style="color: var(--gold-highlight);"></i>
+            <span>Next Generation AI Forensic Security</span>
         </div>
 
-        <h1>DeepVision AI</h1>
+        <h1>DeepVision <span>AI</span></h1>
 
         <h2>
             Smarter Vision for a Safer Digital World
         </h2>
 
         <p>
-            Detect Deepfake Images in Seconds using our
-            AI-powered MobileNetV2 Engine trained on
-            100,000+ real and fake images.
+            Detect deepfake images in seconds using our AI-powered MobileNetV2 engine trained on
+            100,000+ real and synthetic facial images.
         </p>
 
         <div class="hero-buttons">
 
-            <a href="{{ url_for('login') }}" class="btn-primary">
-                🚀 Get Started
+            <a href="{% if session.user_id %}{{ url_for('dashboard') }}{% else %}{{ url_for('signup') }}{% endif %}" class="btn-primary">
+                <i class="fa-solid fa-bolt"></i>
+                <span>{% if session.user_id %}Go to Dashboard{% else %}Get Started Free{% endif %}</span>
             </a>
 
             <a href="#features" class="btn-secondary">
-                ▶ Learn More
+                <i class="fa-solid fa-compass"></i>
+                <span>Explore Features</span>
             </a>
 
         </div>
@@ -40,17 +41,17 @@
 
             <div>
                 <h3>100K+</h3>
-                <span>Dataset</span>
+                <span>Trained Dataset</span>
             </div>
 
             <div>
                 <h3>98.7%</h3>
-                <span>Accuracy</span>
+                <span>Benchmark Accuracy</span>
             </div>
 
             <div>
                 <h3>Real-Time</h3>
-                <span>Detection</span>
+                <span>Inference Engine</span>
             </div>
 
         </div>
@@ -64,7 +65,7 @@
             <img
                 src="{{ url_for('static', filename='images/ai-eye.png') }}"
                 class="hero-eye"
-                alt="AI Eye">
+                alt="DeepVision AI Eye Scanner">
 
             <div class="scan-line"></div>
 
@@ -84,237 +85,168 @@
 </section>
 
 <!-- ================= FEATURES ================= -->
-
 <section class="features-section" id="features">
 
     <div class="section-title">
-
-        <span>WHY CHOOSE US</span>
-
+        <span>Why Choose Us</span>
         <h2>Powerful AI Detection Features</h2>
-
         <p>
-            Built for speed, security and accuracy using modern AI.
+            Engineered for high-throughput forensic analysis, biometric accuracy, and seamless deployment.
         </p>
-
     </div>
 
     <div class="features-grid">
 
         <div class="feature-card">
-
-            <div class="feature-icon">🧠</div>
-
-            <h3>AI Powered</h3>
-
+            <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+            <h3>Deep Transfer Learning</h3>
             <p>
-                MobileNetV2 model trained on
-                100,000+ real and fake images.
+                MobileNetV2 neural architecture fine-tuned on diverse facial manipulation datasets.
             </p>
-
         </div>
 
         <div class="feature-card">
-
-            <div class="feature-icon">⚡</div>
-
-            <h3>Real-Time Detection</h3>
-
+            <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+            <h3>Real-Time Inference</h3>
             <p>
-                Detect manipulated images
-                within seconds.
+                Optimized tensor pipelines analyze textures and edge artifacts within milliseconds.
             </p>
-
         </div>
 
         <div class="feature-card">
-
-            <div class="feature-icon">🔒</div>
-
-            <h3>Secure Upload</h3>
-
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3>Encrypted Uploads</h3>
             <p>
-                Uploaded images remain
-                private and protected.
+                Local image processing ensures suspect uploads remain confidential and private.
             </p>
-
         </div>
 
         <div class="feature-card">
-
-            <div class="feature-icon">📊</div>
-
-            <h3>Confidence Score</h3>
-
+            <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h3>Confidence Scoring</h3>
             <p>
-                Every prediction includes
-                AI confidence percentage.
+                Every prediction includes precise sigmoid confidence metrics and boundary analysis.
             </p>
-
         </div>
 
         <div class="feature-card">
-
-            <div class="feature-icon">📁</div>
-
-            <h3>Prediction History</h3>
-
+            <div class="feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <h3>Forensic Audit History</h3>
             <p>
-                View previous detections
-                anytime from dashboard.
+                Review past evaluations with instant search, verdict filtering, and timestamps.
             </p>
-
         </div>
 
         <div class="feature-card">
-
-            <div class="feature-icon">☁️</div>
-
+            <div class="feature-icon"><i class="fa-solid fa-cloud"></i></div>
             <h3>Cloud Ready</h3>
-
             <p>
-                Designed for AWS deployment
-                with scalable architecture.
+                Containerized with Docker for seamless horizontal scaling across AWS or local clusters.
             </p>
-
         </div>
 
     </div>
 
 </section>
 
+<!-- ================= WORKFLOW ================= -->
 <section class="workflow-section" id="workflow">
 
     <div class="section-title">
-
-        <span>WORKFLOW</span>
-
+        <span>Workflow</span>
         <h2>How DeepVision AI Works</h2>
-
         <p>
-            Detect Deepfake Images in just four simple steps.
+            Authenticate suspect images in four automated forensic steps.
         </p>
-
     </div>
 
     <div class="workflow-container">
 
         <div class="workflow-card">
-
             <div class="workflow-number">01</div>
-
-            <div class="workflow-icon">📤</div>
-
+            <div class="workflow-icon"><i class="fa-solid fa-cloud-arrow-up" style="color: var(--gold-highlight);"></i></div>
             <h3>Upload Image</h3>
-
-            <p>
-                Upload any image securely from your device.
-            </p>
-
+            <p>Drag and drop any suspect portrait in JPG, PNG, or WEBP format.</p>
         </div>
 
-        <div class="workflow-arrow">→</div>
+        <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
         <div class="workflow-card">
-
             <div class="workflow-number">02</div>
-
-            <div class="workflow-icon">🧠</div>
-
-            <h3>AI Processing</h3>
-
-            <p>
-                MobileNetV2 analyzes thousands of facial features.
-            </p>
-
+            <div class="workflow-icon"><i class="fa-solid fa-microchip" style="color: var(--gold-highlight);"></i></div>
+            <h3>Tensor Preprocessing</h3>
+            <p>Image scaled to 224&times;224 RGB and normalized for neural evaluation.</p>
         </div>
 
-        <div class="workflow-arrow">→</div>
+        <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
         <div class="workflow-card">
-
             <div class="workflow-number">03</div>
-
-            <div class="workflow-icon">⚡</div>
-
-            <h3>Prediction</h3>
-
-            <p>
-                AI predicts whether the image is Real or Fake.
-            </p>
-
+            <div class="workflow-icon"><i class="fa-solid fa-magnifying-glass-chart" style="color: var(--gold-highlight);"></i></div>
+            <h3>Neural Prediction</h3>
+            <p>MobileNetV2 detects synthesis seams, frequency noise, and artifacts.</p>
         </div>
 
-        <div class="workflow-arrow">→</div>
+        <div class="workflow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
 
         <div class="workflow-card">
-
             <div class="workflow-number">04</div>
-
-            <div class="workflow-icon">📊</div>
-
-            <h3>Result</h3>
-
-            <p>
-                Get confidence score and detailed prediction instantly.
-            </p>
-
+            <div class="workflow-icon"><i class="fa-solid fa-file-shield" style="color: var(--gold-highlight);"></i></div>
+            <h3>Forensic Report</h3>
+            <p>Receive authenticated verdict, confidence score, and persistent audit record.</p>
         </div>
 
     </div>
 
 </section>
 
+<!-- ================= WHY DEEPVISION ================= -->
 <section class="why-section">
 
     <div class="section-title">
-
-        <span>WHY DEEPVISION?</span>
-
-        <h2>Why Choose DeepVision AI?</h2>
-
+        <span>Why DeepVision?</span>
+        <h2>Enterprise-Grade Detection Architecture</h2>
         <p>
-            Built with modern AI technologies for accuracy, speed and security.
+            Combining modern computer vision with accessible security tooling.
         </p>
-
     </div>
 
     <div class="why-grid">
 
         <div class="why-card">
-            <div class="why-icon">🎯</div>
+            <div class="why-icon"><i class="fa-solid fa-bullseye" style="color: var(--gold-highlight);"></i></div>
             <h3>98.7% Accuracy</h3>
-            <p>High precision prediction using MobileNetV2.</p>
+            <p>High-precision binary classification trained on balanced deepfake datasets.</p>
         </div>
 
         <div class="why-card">
-            <div class="why-icon">⚡</div>
-            <h3>Fast Detection</h3>
-            <p>Analyze images within seconds.</p>
+            <div class="why-icon"><i class="fa-solid fa-gauge-high" style="color: var(--gold-highlight);"></i></div>
+            <h3>Sub-Second Inference</h3>
+            <p>Evaluate images in milliseconds with optimized MobileNetV2 layers.</p>
         </div>
 
         <div class="why-card">
-            <div class="why-icon">🔒</div>
-            <h3>Secure Platform</h3>
-            <p>Your uploaded images remain completely private.</p>
+            <div class="why-icon"><i class="fa-solid fa-lock" style="color: var(--gold-highlight);"></i></div>
+            <h3>Data Privacy</h3>
+            <p>All processing is self-contained with no external 3rd-party data sharing.</p>
         </div>
 
         <div class="why-card">
-            <div class="why-icon">📈</div>
-            <h3>Confidence Score</h3>
-            <p>Every prediction includes AI confidence percentage.</p>
+            <div class="why-icon"><i class="fa-solid fa-chart-simple" style="color: var(--gold-highlight);"></i></div>
+            <h3>Calibrated Confidence</h3>
+            <p>Transparent confidence metrics accompany every forensic decision.</p>
         </div>
 
         <div class="why-card">
-            <div class="why-icon">☁️</div>
-            <h3>Cloud Ready</h3>
-            <p>Designed for AWS cloud deployment.</p>
+            <div class="why-icon"><i class="fa-brands fa-docker" style="color: var(--gold-highlight);"></i></div>
+            <h3>Containerized Deployment</h3>
+            <p>Production-ready Docker and Cloud configuration for rapid deployment.</p>
         </div>
 
         <div class="why-card">
-            <div class="why-icon">💻</div>
-            <h3>Modern UI</h3>
-            <p>Premium responsive interface built using Flask.</p>
+            <div class="why-icon"><i class="fa-solid fa-gem" style="color: var(--gold-highlight);"></i></div>
+            <h3>Luxury Dark Gold UI</h3>
+            <p>Sophisticated SaaS interface built with responsive dark gold aesthetics.</p>
         </div>
 
     </div>
@@ -322,151 +254,116 @@
 </section>
 
 <!-- ================= LIVE STATS ================= -->
-
 <section class="counter-section">
 
     <div class="counter-card">
-
-        <h2 class="counter" data-target="100000">0</h2>
-
-        <span>Images Analysed</span>
-
+        <h2>100,000+</h2>
+        <span>Images in Dataset</span>
     </div>
 
     <div class="counter-card">
-
-        <h2 class="counter" data-target="98">0</h2>
-
-        <span>Accuracy (%)</span>
-
+        <h2>98.7%</h2>
+        <span>Validation Accuracy</span>
     </div>
 
     <div class="counter-card">
-
-        <h2 class="counter" data-target="2">0</h2>
-
-        <span>Seconds Detection</span>
-
+        <h2>&lt; 2s</h2>
+        <span>Average Analysis Time</span>
     </div>
 
     <div class="counter-card">
-
         <h2>24/7</h2>
-
-        <span>AI Online</span>
-
+        <span>Neural Engine Online</span>
     </div>
 
 </section>
 
 <!-- ================= TECH STACK ================= -->
-
 <section class="tech-section" id="tech">
 
     <div class="section-title">
-
-        <span>TECH STACK</span>
-
-        <h2>Powered By Modern Technologies</h2>
-
+        <span>Tech Stack</span>
+        <h2>Powered By Industry-Standard Technologies</h2>
         <p>
-            DeepVision AI is built using modern AI, Cloud and Web technologies.
+            DeepVision AI combines state-of-the-art Python ML libraries with robust web standards.
         </p>
-
     </div>
 
     <div class="tech-grid">
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
             <h3>Python</h3>
         </div>
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask">
             <h3>Flask</h3>
         </div>
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow">
             <h3>TensorFlow</h3>
         </div>
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker">
             <h3>Docker</h3>
         </div>
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg">
-            <h3>GitHub</h3>
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite">
+            <h3>SQLite</h3>
         </div>
 
         <div class="tech-card">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS">
             <h3>AWS</h3>
         </div>
 
     </div>
 
 </section>
-<!-- ================= FOOTER ================= -->
 
+<!-- ================= FOOTER ================= -->
 <footer class="footer">
 
     <div class="footer-grid">
 
         <div class="footer-box">
-
             <h2>DeepVision AI</h2>
-
             <p>
-
-                AI Powered Deepfake Detection Platform built
-                using Flask, TensorFlow and MobileNetV2.
-
+                Enterprise AI-powered deepfake image detection platform built using
+                Flask, TensorFlow, and MobileNetV2 architecture.
             </p>
-
         </div>
 
         <div class="footer-box">
-
             <h3>Quick Links</h3>
-
-            <a href="#">Home</a>
+            <a href="{{ url_for('home') }}">Home</a>
             <a href="#features">Features</a>
             <a href="#workflow">Workflow</a>
             <a href="#tech">Tech Stack</a>
-
         </div>
 
         <div class="footer-box">
-
             <h3>Developer</h3>
-
-            <a href="#">Prasan Kumar</a>
-            <a href="#">GitHub</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Portfolio</a>
-
+            <a href="https://github.com/Prasankumar2604" target="_blank" rel="noopener">Prasan Kumar</a>
+            <a href="https://github.com/Prasankumar2604" target="_blank" rel="noopener">GitHub Profile</a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="{{ url_for('detect') }}">Detect Studio</a>
         </div>
 
         <div class="footer-box">
-
-            <h3>Contact</h3>
-
-            <p>📧 prasan@email.com</p>
-
+            <h3>Contact & Location</h3>
+            <p>📧 prasankumar2604@gmail.com</p>
             <p>📍 Bengaluru, India</p>
-
         </div>
 
     </div>
 
     <div class="footer-bottom">
-
-        © 2026 DeepVision AI • Built with ❤️ using Flask & TensorFlow
-
+        &copy; 2026 DeepVision AI &bull; Built with precision using Flask &amp; TensorFlow &bull; Luxury Dark Gold Edition
     </div>
 
 </footer>

@@ -1,0 +1,159 @@
+/* ==========================================================================
+   DeepVision AI — Dynamic Animation System
+   Performance-conscious CSS keyframes & transitions
+   ========================================================================== */
+
+/* Fade and Slide Up Entrance */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle Fade In */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Slide Down for menus and alerts */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle Gold Pulse */
+@keyframes pulseGold {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(201, 164, 92, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(201, 164, 92, 0);
+  }
+}
+
+/* Subtle Shimmer for High-Priority Gold Elements */
+@keyframes goldShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Deepfake Forensic Laser Scan Line */
+@keyframes scanLaser {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Scanning Grid Animation */
+@keyframes scanGridPulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.65; }
+}
+
+/* Staggered Content Animation Utility Classes */
+.animate-fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.40s; }
+
+/* Laser Scanner Container & Line */
+.scanning-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+  background: rgba(17, 18, 20, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.scanning-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(201, 164, 92, 0.7) 15%, 
+    #E6C982 50%, 
+    rgba(201, 164, 92, 0.7) 85%, 
+    transparent 100%);
+  box-shadow: 0 0 16px 3px rgba(230, 201, 130, 0.8),
+              0 0 30px 6px rgba(201, 164, 92, 0.4);
+  animation: scanLaser 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.scanning-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(201, 164, 92, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 164, 92, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: scanGridPulse 3s ease-in-out infinite;
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(17, 18, 20, 0.25);
+  border-top-color: #111214;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Accessibility: Reduced Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scanning-laser {
+    display: none !important;
+  }
+}

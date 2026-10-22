@@ -1,0 +1,146 @@
+/* ==========================================================================
+   DeepVision AI — Luxury Dark Gold Authentication Styles (Expanded Sizing)
+   ========================================================================== */
+
+.login-wrapper {
+  min-height: calc(85vh - var(--nav-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 3.5rem 3.25rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 35px rgba(201, 164, 92, 0.08);
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: -90px;
+  right: -90px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(201, 164, 92, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Authentication Brand Header */
+.auth-header {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.auth-brand-emblem {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1A1B1E 0%, #292929 100%);
+  border: 1px solid var(--border-gold-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.35rem;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), inset 0 0 14px rgba(201, 164, 92, 0.15);
+}
+
+.auth-brand-emblem .emblem-core {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  box-shadow: 0 0 14px rgba(230, 201, 130, 0.85);
+}
+
+.auth-header h1 {
+  font-size: 2.25rem;
+  color: var(--text-primary);
+  margin-bottom: 0.55rem;
+  letter-spacing: -0.02em;
+}
+
+.auth-header h1 span {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.auth-header p strong {
+  color: var(--gold-highlight);
+  font-weight: 600;
+}
+
+/* Input Fields & Password Visibility */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  padding-right: 3.25rem !important;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 1.15rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.45rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.toggle-password-btn:hover {
+  color: var(--gold-highlight);
+}
+
+/* Button & Footer Links */
+.login-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1.15rem;
+  font-size: 1.12rem;
+}
+
+.login-footer {
+  margin-top: 2.25rem;
+  padding-top: 1.65rem;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+  font-size: 0.98rem;
+  color: var(--text-muted);
+}
+
+.login-footer a {
+  color: var(--gold-highlight);
+  font-weight: 600;
+  margin-left: 0.4rem;
+  transition: color 0.2s ease;
+}
+
+.login-footer a:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}

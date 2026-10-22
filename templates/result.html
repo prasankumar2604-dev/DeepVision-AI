@@ -1,89 +1,120 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="result-container animate-fade-up">
 
-<div class="result-container">
+  <!-- Header -->
+  <div class="result-header">
+    <div class="report-badge">
+      <i class="fa-solid fa-file-shield"></i>
+      <span>Forensic Neural Audit</span>
+    </div>
+    <h1>AI Detection <span>Verdict</span></h1>
+    <p>Completed deep transfer learning evaluation against 100,000+ benchmark face models.</p>
+  </div>
 
-    <div class="result-card">
+  <!-- Main Forensic Card -->
+  <div class="result-card">
 
-        <div class="result-image">
+    <!-- Left Pane: Inspected Image -->
+    <div class="result-image-pane">
+      <div class="image-frame">
+        <div class="frame-corner-tl"></div>
+        <div class="frame-corner-br"></div>
+        <img src="{{ image_path }}" alt="Analyzed Target Image">
+      </div>
 
-            <img src="{{ image_path }}" alt="Uploaded Image">
+      <div class="image-caption">
+        <i class="fa-solid fa-camera"></i>
+        <span>Target Source Analyzed</span>
+      </div>
+    </div>
 
+    <!-- Right Pane: Detection Findings -->
+    <div class="result-info-pane">
+      <div class="verdict-box">
+        {% if prediction == "Real" %}
+        <div class="verdict-label-pill verdict-real">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Authentic Image (Real)</span>
+        </div>
+        <p class="verdict-description">
+          DeepVision AI detected coherent biological facial landmarks, natural illumination gradients,
+          and organic skin texture patterns consistent with authentic photography.
+        </p>
+        {% else %}
+        <div class="verdict-label-pill verdict-fake">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Synthetic / Deepfake Detected</span>
+        </div>
+        <p class="verdict-description">
+          DeepVision AI identified high-probability generative anomalies, frequency boundary seams,
+          or latent artifacts consistent with GAN or diffusion-based synthetic manipulation.
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- Confidence Score Meter -->
+      <div class="confidence-box">
+        <div class="confidence-header">
+          <span class="confidence-title">Model Confidence Score</span>
+          <div class="confidence-number">
+            {{ confidence }}<span>%</span>
+          </div>
         </div>
 
-        <div class="result-info">
-
-            <h1>🧠 AI Detection Result</h1>
-
-            {% if prediction == "Real" %}
-
-            <span class="result-label result-real">
-
-                ✅ REAL IMAGE
-
-            </span>
-
-            {% else %}
-
-            <span class="result-label result-fake">
-
-                ❌ FAKE IMAGE
-
-            </span>
-
-            {% endif %}
-
-            <div class="confidence-box">
-
-                <div class="confidence-title">
-
-                    Confidence : {{ confidence }}%
-
-                </div>
-
-                <div class="progress">
-
-                    <div class="progress-bar"
-
-                         style="width:{{ confidence }}%;">
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <p>
-
-                DeepVision AI analyzed facial features,
-
-                textures and image artifacts using
-
-                MobileNetV2 Deep Learning.
-
-            </p>
-
-            <div class="result-buttons">
-
-                <a href="/detect" class="btn">
-
-                    Analyze Another
-
-                </a>
-
-                <a href="/history" class="secondary-btn">
-
-                    View History
-
-                </a>
-
-            </div>
-
+        <div class="progress-track">
+          <div
+            class="progress-fill {% if prediction == 'Real' %}fill-real{% else %}fill-fake{% endif %}"
+            style="width: {{ confidence }}%;">
+          </div>
         </div>
+      </div>
+
+      <!-- Neural Model Metadata Details -->
+      <div class="metadata-grid">
+        <div class="metadata-item">
+          <span class="metadata-label">Neural Architecture</span>
+          <span class="metadata-val">MobileNetV2 Fine-Tuned</span>
+        </div>
+
+        <div class="metadata-item">
+          <span class="metadata-label">Resolution</span>
+          <span class="metadata-val">224 &times; 224 RGB</span>
+        </div>
+
+        <div class="metadata-item">
+          <span class="metadata-label">Decision Boundary</span>
+          <span class="metadata-val">&ge; 0.5 Sigmoid Threshold</span>
+        </div>
+
+        <div class="metadata-item">
+          <span class="metadata-label">Audit Log</span>
+          <span class="metadata-val">Saved to Database</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="result-actions">
+        <a href="{{ url_for('detect') }}" class="btn-primary">
+          <i class="fa-solid fa-arrow-rotate-right"></i>
+          <span>Analyze Another</span>
+        </a>
+
+        <a href="{{ url_for('history') }}" class="btn-secondary">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>View History</span>
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="btn-outline">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </a>
+      </div>
 
     </div>
 
-</div>
+  </div>
 
+</div>
 {% endblock %}

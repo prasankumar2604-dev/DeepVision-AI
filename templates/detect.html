@@ -1,95 +1,98 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="detect-page animate-fade-up">
 
-<div class="detect-page">
+  <!-- Detection Studio Header -->
+  <div class="detect-header">
+    <div class="studio-badge">
+      <i class="fa-solid fa-microchip"></i>
+      <span>MobileNetV2 Neural Engine</span>
+    </div>
+    <h1>Deepfake Image <span>Forensic Studio</span></h1>
+    <p>
+      Upload any suspect image or facial portrait. DeepVision AI evaluates synthetic artifacts,
+      frequency distortions, and biological consistency using deep transfer learning.
+    </p>
+  </div>
 
-    <div class="detect-header">
+  <!-- Detection Upload & Analysis Form -->
+  <form
+    id="detectForm"
+    action="{{ url_for('predict') }}"
+    method="POST"
+    enctype="multipart/form-data"
+    class="detect-form">
 
-        <h1>🧠 AI Deepfake Detection</h1>
+    <!-- Upload Drop Area (Visible when no file is chosen) -->
+    <label class="upload-area" id="uploadArea" for="imageInput">
+      <input
+        type="file"
+        id="imageInput"
+        name="image"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
+        required>
 
-        <p>
-            Upload an image and let DeepVision AI determine
-            whether it is <b>Real</b> or <b>AI Generated</b>.
-        </p>
+      <div class="upload-icon-box">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+      </div>
 
+      <div class="upload-title">Drag & drop suspect image here</div>
+      <div class="upload-subtitle">or choose a file from your computer</div>
+
+      <div class="browse-pill">
+        <i class="fa-solid fa-folder-open"></i>
+        <span>Browse Files</span>
+      </div>
+    </label>
+
+    <!-- Supported Format Specifications Strip -->
+    <div class="supported-formats-bar">
+      <span><b>Supported Formats:</b> JPG &bull; PNG &bull; JPEG &bull; WEBP</span>
+      <span>&bull;</span>
+      <span><b>Target Resolution:</b> 224 &times; 224 px (Auto-Scaled)</span>
+      <span>&bull;</span>
+      <span><b>Maximum File Size:</b> 16MB</span>
     </div>
 
-    <form
-        action="/predict"
-        method="POST"
-        enctype="multipart/form-data"
-        class="detect-form">
+    <!-- Live Preview Stage (Appears when image is selected) -->
+    <div class="preview-container" id="previewContainer">
+      <div class="preview-image-wrapper" id="previewWrapper">
+        <img id="previewImage" class="preview-image" alt="Suspect Image Preview">
+      </div>
 
-        <label class="upload-area">
+      <!-- File Metadata Details -->
+      <div class="preview-meta-bar">
+        <div class="meta-details">
+          <span class="meta-name" id="previewName">filename.jpg</span>
+          <span class="meta-size" id="previewSize">0 KB</span>
+        </div>
 
-            <input
-                type="file"
-                id="imageInput"
-                name="image"
-                accept="image/*"
-                required>
-
-            <div class="upload-content">
-
-                <div class="upload-icon">📤</div>
-
-                <h2>Drag & Drop Image</h2>
-
-                <p>or click to browse</p>
-
-            </div>
-
-        </label>
-        <div class="tips">
-
-    <h3>📌 Supported Formats</h3>
-
-    <p>
-
-        JPG • PNG • JPEG • WEBP
-
-    </p>
-
-</div>
-
-        <img
-            id="preview"
-            class="preview-image"
-            style="display:none;">
-
-        <button
-            class="detect-btn"
-            type="submit">
-
-            🧠 Analyze with DeepVision AI
-
+        <button type="button" class="remove-file-btn" id="removeFileBtn">
+          <i class="fa-solid fa-xmark"></i>
+          <span>Change Image</span>
         </button>
+      </div>
 
-    </form>
+      <!-- Dynamic Scanning Message during Processing -->
+      <div class="scanning-status-banner" id="scanningBanner">
+        <span class="spinner"></span>
+        <span>Neural Model Inference in progress... Analyzing facial textures & frequency artifacts...</span>
+      </div>
+    </div>
+
+    <!-- Form Submit Action -->
+    <div class="action-row">
+      <button
+        id="detectSubmitBtn"
+        class="btn-primary detect-btn"
+        type="submit">
+        <i class="fa-solid fa-brain"></i>
+        <span>Analyze with DeepVision AI</span>
+      </button>
+    </div>
+
+  </form>
 
 </div>
-
-<script>
-
-const imageInput=document.getElementById("imageInput");
-
-const preview=document.getElementById("preview");
-
-imageInput.addEventListener("change",function(){
-
-    const file=this.files[0];
-
-    if(file){
-
-        preview.src=URL.createObjectURL(file);
-
-        preview.style.display="block";
-
-    }
-
-});
-
-</script>
-
 {% endblock %}

@@ -1,77 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="login-wrapper">
 
-    <div class="login-card">
+  <div class="login-card">
 
-        <h1>Create Account 🚀</h1>
-
-        <p>
-            Join <strong>DeepVision AI</strong> and start detecting deepfake images.
-        </p>
-
-        <form method="POST" action="/signup">
-
-            <div class="input-group">
-
-                <label>Username</label>
-
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Enter your username"
-                    required>
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Email Address</label>
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required>
-
-            </div>
-
-            <div class="input-group">
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Create a password"
-                    required>
-
-            </div>
-
-            <button class="btn login-btn">
-
-                Create Account
-
-            </button>
-
-        </form>
-
-        <div class="login-footer">
-
-            Already have an account?
-
-            <a href="/login">
-
-                Login Here
-
-            </a>
-
-        </div>
-
+    <div class="auth-header">
+      <div class="auth-brand-emblem">
+        <div class="emblem-core"></div>
+      </div>
+      <h1>Create <span>Account</span></h1>
+      <p>
+        Join <strong>DeepVision AI</strong> and start detecting deepfake images.
+      </p>
     </div>
 
-</div>
+    <form method="POST" action="{{ url_for('signup') }}">
 
+      <div class="input-group">
+        <label for="signupUsername">Username</label>
+        <input
+          type="text"
+          id="signupUsername"
+          name="username"
+          placeholder="e.g. AlexMorgan"
+          autocomplete="username"
+          required>
+      </div>
+
+      <div class="input-group">
+        <label for="signupEmail">Email Address</label>
+        <input
+          type="email"
+          id="signupEmail"
+          name="email"
+          placeholder="name@company.com"
+          autocomplete="email"
+          required>
+      </div>
+
+      <div class="input-group">
+        <label for="signupPassword">Password</label>
+        <div class="password-input-wrapper">
+          <input
+            type="password"
+            id="signupPassword"
+            name="password"
+            placeholder="Create a secure password"
+            autocomplete="new-password"
+            required>
+          <button type="button" class="toggle-password-btn" aria-label="Toggle password visibility">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary login-btn">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Create Account</span>
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <span>Already have an account?</span>
+      <a href="{{ url_for('login') }}">Sign In Here</a>
+    </div>
+
+  </div>
+
+</div>
 {% endblock %}

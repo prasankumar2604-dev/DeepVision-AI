@@ -1,0 +1,270 @@
+/* ==========================================================================
+   DeepVision AI — Luxury Dark Gold Forensic Result Styles (Expanded Sizing)
+   ========================================================================== */
+
+.result-container {
+  max-width: 1140px;
+  margin: 2rem auto 4.5rem;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.result-header .report-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 1.15rem;
+  border-radius: var(--radius-full);
+  background: rgba(201, 164, 92, 0.1);
+  border: 1px solid var(--border-gold-subtle);
+  color: var(--gold-highlight);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.result-header h1 {
+  font-size: clamp(2.35rem, 3.6vw, 3.1rem);
+  color: var(--text-primary);
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+.result-header p {
+  color: var(--text-secondary);
+  font-size: 1.08rem;
+}
+
+/* ==========================================================================
+   Main Result Card Layout (Expanded Proportions)
+   ========================================================================== */
+
+.result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.05fr 1.35fr;
+  position: relative;
+}
+
+/* Left: Inspected Image Showcase */
+.result-image-pane {
+  background: #0E0F12;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color);
+  position: relative;
+}
+
+.image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-card);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  background: #17181A;
+}
+
+.image-frame img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+.frame-corner-tl, .frame-corner-br {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--gold-primary);
+  pointer-events: none;
+}
+
+.frame-corner-tl {
+  top: 10px;
+  left: 10px;
+  border-top: 2px solid var(--gold-primary);
+  border-left: 2px solid var(--gold-primary);
+}
+
+.frame-corner-br {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 2px solid var(--gold-primary);
+  border-right: 2px solid var(--gold-primary);
+}
+
+.image-caption {
+  margin-top: 1.25rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* Right: Verdict & Metrics Pane */
+.result-info-pane {
+  padding: 3.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Verdict Badge & Title */
+.verdict-box {
+  margin-bottom: 2rem;
+}
+
+.verdict-label-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.verdict-real {
+  background: var(--status-real-bg);
+  border: 1px solid var(--status-real-border);
+  color: var(--status-real);
+  box-shadow: 0 0 24px rgba(52, 211, 153, 0.18);
+}
+
+.verdict-fake {
+  background: var(--status-fake-bg);
+  border: 1px solid var(--status-fake-border);
+  color: var(--status-fake);
+  box-shadow: 0 0 24px rgba(248, 113, 113, 0.18);
+}
+
+.verdict-description {
+  font-size: 1.08rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Confidence Score Gauge */
+.confidence-box {
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.85rem;
+  margin-bottom: 2rem;
+}
+
+.confidence-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.confidence-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.confidence-number {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.confidence-number span {
+  font-size: 1.5rem;
+  color: var(--gold-highlight);
+}
+
+.progress-track {
+  width: 100%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progress-fill.fill-real {
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+.progress-fill.fill-fake {
+  background: linear-gradient(90deg, #EF4444, #F87171);
+}
+
+/* Model Metadata List */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+
+.metadata-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metadata-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.metadata-val {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Action Buttons */
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  flex-wrap: wrap;
+}
+
+.result-actions .btn {
+  flex: 1;
+  min-width: 190px;
+  padding: 1.05rem 1.85rem;
+  font-size: 1.05rem;
+}

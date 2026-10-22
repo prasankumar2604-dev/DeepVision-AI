@@ -1,153 +1,300 @@
-/*==============================
-    DeepVision AI Logo
-===============================*/
+/* ==========================================================================
+   DeepVision AI — Luxury Dark Gold Global Navigation (Enhanced Sizing)
+   ========================================================================== */
 
-.logo{
-
-display:flex;
-
-align-items:center;
-
-gap:18px;
-
+.navbar, .landing-navbar {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 1.5rem auto 1.25rem;
+  padding: 1.1rem 2.25rem;
+  background: rgba(25, 26, 29, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.logo-text h2{
-
-font-size:32px;
-
-font-weight:800;
-
-margin:0;
-
-background:linear-gradient(90deg,#3b82f6,#38bdf8);
-
--webkit-background-clip:text;
-
--webkit-text-fill-color:transparent;
-
+.navbar:hover, .landing-navbar:hover {
+  border-color: rgba(201, 164, 92, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 20px rgba(201, 164, 92, 0.08);
 }
 
-.logo-text p{
+/* ==========================================================================
+   Logo & Wordmark
+   ========================================================================== */
 
-margin-top:4px;
-
-color:#94a3b8;
-
-font-size:14px;
-
-font-weight:500;
-
-letter-spacing:.6px;
-
-}
-.logo-icon{
-
-position:relative;
-
-width:70px;
-
-height:70px;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-}
-.core{
-
-width:18px;
-
-height:18px;
-
-background:#3b82f6;
-
-border-radius:50%;
-
-box-shadow:
-
-0 0 12px #3b82f6,
-
-0 0 25px #38bdf8;
-
-animation:pulse 2s infinite;
-
-}
-.node{
-
-position:absolute;
-
-width:10px;
-
-height:10px;
-
-background:#38bdf8;
-
-border-radius:50%;
-
-box-shadow:0 0 10px #38bdf8;
-
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  text-decoration: none;
+  user-select: none;
 }
 
-.n1{
-
-top:8px;
-
-left:50%;
-
-transform:translateX(-50%);
-
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #1E1F23 0%, #292929 100%);
+  border: 1px solid var(--border-gold-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 0 12px rgba(201, 164, 92, 0.12);
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
-.n2{
-
-bottom:8px;
-
-left:50%;
-
-transform:translateX(-50%);
-
+.logo:hover .logo-icon {
+  transform: scale(1.05);
+  border-color: var(--gold-primary);
+  box-shadow: 0 4px 18px rgba(201, 164, 92, 0.3);
 }
 
-.n3{
-
-left:8px;
-
-top:50%;
-
-transform:translateY(-50%);
-
+/* Subtle Gold Neural Core Emblem */
+.logo-icon .core {
+  width: 15px;
+  height: 15px;
+  background: var(--gold-gradient);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(230, 201, 130, 0.75);
+  position: relative;
+  z-index: 2;
 }
 
-.n4{
-
-right:8px;
-
-top:50%;
-
-transform:translateY(-50%);
-
-}
-@keyframes pulse{
-
-0%{
-
-transform:scale(1);
-
+.logo-icon .node {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--gold-highlight);
+  border-radius: 50%;
+  opacity: 0.85;
 }
 
-50%{
+.logo-icon .n1 { top: 8px; left: 50%; transform: translateX(-50%); }
+.logo-icon .n2 { bottom: 8px; left: 50%; transform: translateX(-50%); }
+.logo-icon .n3 { left: 8px; top: 50%; transform: translateY(-50%); }
+.logo-icon .n4 { right: 8px; top: 50%; transform: translateY(-50%); }
 
-transform:scale(1.25);
-
+.logo-text {
+  display: flex;
+  flex-direction: column;
 }
 
-100%{
-
-transform:scale(1);
-
+.logo-text h2 {
+  font-size: 1.38rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.15;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
+.logo-text h2 span {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo-text p {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0.2rem 0 0 0;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Navigation Links
+   ========================================================================== */
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+nav a i {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+nav a:hover i {
+  color: var(--gold-highlight);
+}
+
+/* Active Navigation State */
+nav a.active {
+  color: var(--gold-highlight);
+  background: rgba(201, 164, 92, 0.12);
+  border-color: var(--border-gold-subtle);
+  font-weight: 600;
+}
+
+nav a.active i {
+  color: var(--gold-primary);
+}
+
+/* User Profile Chip */
+.nav-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 1.15rem;
+  margin-left: 0.75rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.nav-user-chip .user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  color: #111214;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.nav-user-chip .username-text {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Nav Logout Button */
+nav a.nav-logout {
+  color: var(--text-muted);
+  border-color: transparent;
+}
+
+nav a.nav-logout:hover {
+  color: var(--status-fake);
+  background: var(--status-fake-bg);
+  border-color: var(--status-fake-border);
+}
+
+nav a.nav-logout:hover i {
+  color: var(--status-fake);
+}
+
+/* Landing Nav CTA */
+.nav-login {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.nav-login:hover {
+  color: var(--gold-highlight);
+}
+
+.nav-btn {
+  padding: 0.65rem 1.55rem;
+  font-size: 0.96rem;
+}
+
+/* ==========================================================================
+   Mobile Navigation Toggle & Drawer
+   ========================================================================== */
+
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-highlight);
+}
+
+.mobile-drawer {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  left: 0;
+  right: 0;
+  background: rgba(25, 26, 29, 0.98);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  gap: 0.55rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+  z-index: 101;
+}
+
+.mobile-drawer.open {
+  display: flex;
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1.15rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.mobile-drawer a.active {
+  color: var(--gold-highlight);
+  background: rgba(201, 164, 92, 0.12);
+  border-color: var(--border-gold-subtle);
+}
+
+.mobile-drawer a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
 }

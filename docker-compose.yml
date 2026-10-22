@@ -1,0 +1,36 @@
+# ==========================================================
+# DeepVision AI — Docker Compose Configuration
+# Production-ready multi-container orchestration with persistent volumes
+# ==========================================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: deepvision-app
+    image: deepvision-ai:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=deepvision_production_secret_key_luxury_gold_2026
+      - PORT=5000
+      - PYTHONUTF8=1
+    volumes:
+      # Persistent SQLite database volume to survive container recreation
+      - deepvision_db:/app/database
+      # Persistent uploaded images volume
+      - deepvision_uploads:/app/static/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/').read()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+volumes:
+  deepvision_db:
+    name: deepvision_db_volume
+  deepvision_uploads:
+    name: deepvision_uploads_volume

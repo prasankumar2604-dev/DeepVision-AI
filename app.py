@@ -16,6 +16,14 @@ from flask import (
 )
 
 import os
+import sys
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 import sqlite3
 from werkzeug.utils import secure_filename
 
@@ -30,17 +38,21 @@ from database import create_database
 
 app = Flask(__name__)
 
-app.secret_key = "deepvision_secret_key"
+create_database()
+app.secret_key = os.environ.get("SECRET_KEY", "deepvision_secret_key")
 
 # ----------------------------------------------------
 # Configuration
 # ----------------------------------------------------
 
-DATABASE = "database/deepvision.db"
+DATABASE = os.environ.get("DATABASE_PATH", "database/deepvision.db")
 
-UPLOAD_FOLDER = "static/uploads"
+UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "static/uploads")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+db_dir = os.path.dirname(DATABASE)
+if db_dir:
+    os.makedirs(db_dir, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -219,11 +231,46 @@ def dashboard():
 
     total_predictions = cursor.fetchone()["total"]
 
+    cursor.execute(
+        """
+        SELECT COUNT(*) as real_cnt
+        FROM predictions
+        WHERE user_id=? AND prediction='Real'
+        """,
+        (session["user_id"],)
+    )
+    real_count = cursor.fetchone()["real_cnt"]
+
+    cursor.execute(
+        """
+        SELECT COUNT(*) as fake_cnt
+        FROM predictions
+        WHERE user_id=? AND prediction='Fake'
+        """,
+        (session["user_id"],)
+    )
+    fake_count = cursor.fetchone()["fake_cnt"]
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM predictions
+        WHERE user_id=?
+        ORDER BY created_at DESC
+        LIMIT 5
+        """,
+        (session["user_id"],)
+    )
+    recent_predictions = cursor.fetchall()
+
     conn.close()
 
     return render_template(
         "dashboard.html",
-        total_predictions=total_predictions
+        total_predictions=total_predictions,
+        real_count=real_count,
+        fake_count=fake_count,
+        recent_predictions=recent_predictions
     )
 
 
@@ -382,6 +429,6 @@ if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
-        port=5000,
+        port=int(os.environ.get("PORT", 5000)),
         debug=False
     )

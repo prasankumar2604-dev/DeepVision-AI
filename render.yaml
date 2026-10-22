@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: deepvision-ai
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: SECRET_KEY
+        generateValue: true

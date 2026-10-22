@@ -1,97 +1,166 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="history-container animate-fade-up">
 
-<div class="history-container">
+  <div class="history-card">
 
-    <div class="history-card">
+    <!-- Header Section -->
+    <div class="history-header">
+      <div class="history-title-box">
+        <h1>Detection <span>History</span></h1>
+        <p>Complete historical log of all deepfake image forensic evaluations.</p>
+      </div>
 
-        <h1>📜 Detection History</h1>
-
-        {% if predictions %}
-
-        <table class="history-table">
-
-            <thead>
-
-                <tr>
-
-                    <th>🖼 Image</th>
-
-                    <th>Prediction</th>
-
-                    <th>Confidence</th>
-
-                    <th>Date</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {% for item in predictions %}
-
-                <tr>
-
-                    <td>{{ item.image_name }}</td>
-
-                    <td>
-
-                        {% if item.prediction=="Real" %}
-
-                        <span class="badge-real">
-
-                            ✅ REAL
-
-                        </span>
-
-                        {% else %}
-
-                        <span class="badge-fake">
-
-                            ❌ FAKE
-
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>{{ item.confidence }}%</td>
-
-                    <td>{{ item.created_at }}</td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-        {% else %}
-
-        <div class="empty-history">
-
-            <h1>📂</h1>
-
-            <h2>No Detection History</h2>
-
-            <p>
-
-                Start analyzing images and your history
-
-                will appear here.
-
-            </p>
-
-        </div>
-
-        {% endif %}
-
+      <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.65rem 1.35rem; font-size: 0.9rem;">
+        <i class="fa-solid fa-plus"></i>
+        <span>New Detection</span>
+      </a>
     </div>
 
-</div>
+    {% if predictions and predictions|length > 0 %}
 
+    <!-- Real-Time Search & Filter Toolbar -->
+    <div class="history-toolbar">
+      <div class="search-box-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          type="search"
+          id="historySearch"
+          class="history-search-input"
+          placeholder="Filter by image filename..."
+          aria-label="Filter detections by filename">
+      </div>
+
+      <div class="filter-tabs">
+        <button type="button" class="filter-tab active" data-filter="all">All ({{ predictions|length }})</button>
+        <button type="button" class="filter-tab" data-filter="real">Authentic (Real)</button>
+        <button type="button" class="filter-tab" data-filter="fake">Deepfakes</button>
+      </div>
+    </div>
+
+    <!-- Desktop Analytics Table -->
+    <div class="table-responsive">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Image Source</th>
+            <th>Forensic Verdict</th>
+            <th>Confidence Score</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in predictions %}
+          <tr data-filename="{{ item.image_name }}" data-verdict="{{ item.prediction|lower }}">
+            <td>
+              <div class="table-img-cell">
+                <div class="table-thumbnail">
+                  <img
+                    src="{{ url_for('static', filename='uploads/' + item.image_name) }}"
+                    alt="{{ item.image_name }}"
+                    onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-file-image\'></i>';">
+                </div>
+                <span class="table-filename" title="{{ item.image_name }}">{{ item.image_name }}</span>
+              </div>
+            </td>
+
+            <td>
+              {% if item.prediction == "Real" %}
+              <span class="badge badge-real">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Real</span>
+              </span>
+              {% else %}
+              <span class="badge badge-fake">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Fake</span>
+              </span>
+              {% endif %}
+            </td>
+
+            <td>
+              <div class="confidence-cell">
+                <span class="conf-value">{{ item.confidence }}%</span>
+                <div class="conf-mini-bar">
+                  <div
+                    class="conf-mini-fill {% if item.prediction == 'Real' %}real{% else %}fake{% endif %}"
+                    style="width: {{ item.confidence }}%;">
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <span class="time-cell">{{ item.created_at }}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Responsive Cards Layout (Active on <= 768px) -->
+    <div class="history-mobile-cards">
+      {% for item in predictions %}
+      <div class="history-mobile-card" data-filename="{{ item.image_name }}" data-verdict="{{ item.prediction|lower }}">
+        <div class="mobile-card-top">
+          <div class="table-img-cell">
+            <div class="table-thumbnail">
+              <img
+                src="{{ url_for('static', filename='uploads/' + item.image_name) }}"
+                alt="{{ item.image_name }}"
+                onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-file-image\'></i>';">
+            </div>
+            <span class="table-filename" title="{{ item.image_name }}">{{ item.image_name }}</span>
+          </div>
+
+          <div>
+            {% if item.prediction == "Real" %}
+            <span class="badge badge-real">Real</span>
+            {% else %}
+            <span class="badge badge-fake">Fake</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.65rem;">
+          <div class="confidence-cell">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Confidence:</span>
+            <span class="conf-value">{{ item.confidence }}%</span>
+          </div>
+          <span class="time-cell">{{ item.created_at }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- No Search Matches Message -->
+    <div id="emptyFilterMsg" style="display: none; text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+      <i class="fa-solid fa-filter-circle-xmark" style="font-size: 2rem; margin-bottom: 0.75rem; color: var(--gold-muted);"></i>
+      <p>No detection records match your current search or filter criteria.</p>
+    </div>
+
+    {% else %}
+
+    <!-- Empty History State -->
+    <div class="empty-history">
+      <div class="empty-history-icon">
+        <i class="fa-solid fa-box-open"></i>
+      </div>
+      <h2>No Detection Records Found</h2>
+      <p>
+        You haven't performed any deepfake image analyses yet. Upload an image to start evaluating with MobileNetV2.
+      </p>
+      <a href="{{ url_for('detect') }}" class="btn-primary">
+        <i class="fa-solid fa-crosshairs"></i>
+        <span>Launch First Detection</span>
+      </a>
+    </div>
+
+    {% endif %}
+
+  </div>
+
+</div>
 {% endblock %}
