@@ -7,6 +7,7 @@ Prediction Module
 
 import os
 import sys
+import gc
 
 if sys.platform == "win32":
     try:
@@ -15,9 +16,10 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-# Optimize TensorFlow runtime flags for cloud/container deployment
+# Optimize memory management for free cloud tiers (Render 512MB RAM)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+os.environ["MALLOC_TRIM_THRESHOLD_"] = "100000"
 
 import numpy as np
 import tensorflow as tf
@@ -27,7 +29,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
 from config import MODEL_PATH, IMAGE_SIZE
 
-# Thread pool optimization for constrained free-tier environments
+# Thread pool optimization for single-core / low-RAM cloud instances
 try:
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(2)
@@ -61,14 +63,17 @@ def predict_image(image_path):
 
     print("Image loaded successfully")
     
-    img = image.img_to_array(img)
+    img_array = image.img_to_array(img)
+    img_tensor = np.expand_dims(img_array, axis=0)
+    img_preprocessed = preprocess_input(img_tensor)
 
-    img = np.expand_dims(img, axis=0)
+    # Direct model inference: significantly faster and uses far less memory than model.predict()
+    raw_output = model(img_preprocessed, training=False).numpy()
+    prediction = float(raw_output[0][0])
 
-    img = preprocess_input(img)
-
-    # Predict
-    prediction = model.predict(img, verbose=0)[0][0]
+    # Explicit memory cleanup to stay strictly under 512MB RAM
+    del img, img_array, img_tensor, img_preprocessed, raw_output
+    gc.collect()
 
     # Print raw output
     print("=" * 50)
