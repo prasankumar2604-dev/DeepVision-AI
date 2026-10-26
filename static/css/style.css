@@ -1003,17 +1003,36 @@ footer b, footer strong {
   line-height: 1.7;
 }
 
+.footer-box .developer-name {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
 .footer-box a {
   display: block;
   font-size: 0.98rem;
   color: var(--text-muted);
   margin-bottom: 0.75rem;
-  transition: color 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
 }
 
 .footer-box a:hover {
   color: var(--color-cyan);
   transform: translateX(4px);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
+}
+
+.footer-box a:focus-visible {
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(139, 92, 246, 0.35);
 }
 
 .footer-bottom {
