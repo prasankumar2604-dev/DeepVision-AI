@@ -16,6 +16,7 @@ static/uploads/*
 
 # Local database
 database/*.db
+database/.flask_secret
 
 # Environment variables
 .env
@@ -29,6 +30,8 @@ database/*.db
 # Logs
 *.log
 
-# OS files
+# OS & IDE files
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db

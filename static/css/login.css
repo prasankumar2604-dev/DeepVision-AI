@@ -144,3 +144,256 @@
   color: #FFFFFF;
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   Extended DeepVision AI Luxury Authentication Components
+   ========================================================================== */
+
+/* Sub-links in labels (e.g. Forgot Password) */
+.label-with-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.label-with-link label {
+  margin-bottom: 0 !important;
+}
+
+.auth-sub-link {
+  font-size: 0.85rem;
+  color: var(--gold-highlight);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.auth-sub-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* Live Password Rules Card & Checklist */
+.password-rules-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.rules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.strength-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.strength-label.weak {
+  color: var(--status-fake);
+  background: var(--status-fake-bg);
+}
+
+.strength-label.fair {
+  color: var(--status-warning);
+  background: var(--status-warning-bg);
+}
+
+.strength-label.strong {
+  color: var(--status-real);
+  background: var(--status-real-bg);
+}
+
+.strength-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+
+.strength-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--status-fake);
+  border-radius: var(--radius-full);
+  transition: width 0.35s ease, background-color 0.35s ease;
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+@media (min-width: 480px) {
+  .rules-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.rule-item i {
+  font-size: 0.85rem;
+  color: #555555;
+  transition: all 0.25s ease;
+}
+
+.rule-item.valid {
+  color: var(--text-primary);
+}
+
+.rule-item.valid i {
+  color: var(--status-real);
+  transform: scale(1.1);
+}
+
+.rule-item.invalid i {
+  color: var(--status-fake);
+}
+
+/* Two-Factor OTP Verification Page */
+.otp-card {
+  max-width: 480px;
+}
+
+.otp-recipient-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-gold-subtle);
+  border-radius: var(--radius-full);
+  padding: 0.45rem 1rem;
+  font-size: 0.88rem;
+  color: var(--gold-highlight);
+  margin-top: 1rem;
+}
+
+.otp-input-container {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+#otpCodeInput {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.5em;
+  text-align: center;
+  padding: 1rem 1.25rem 1rem 1.75rem;
+  color: var(--gold-highlight);
+  background: var(--bg-input);
+  border: 2px solid var(--border-gold-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 20px rgba(201, 164, 92, 0.08);
+  width: 100%;
+  max-width: 320px;
+  transition: all 0.25s ease;
+}
+
+#otpCodeInput:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 25px rgba(201, 164, 92, 0.25);
+  outline: none;
+}
+
+.otp-status-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.status-item i {
+  color: var(--gold-highlight);
+}
+
+.status-item strong {
+  color: var(--text-primary);
+}
+
+.text-danger {
+  color: var(--status-fake) !important;
+}
+
+.otp-resend-section {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.resend-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 0.65rem;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--border-gold-subtle);
+  color: var(--gold-highlight);
+  background: var(--bg-card-hover);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

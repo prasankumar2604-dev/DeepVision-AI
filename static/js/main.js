@@ -300,4 +300,157 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // =========================================================================
+  // 6. Live Password Security Checklist & Strength Meter
+  // =========================================================================
+  const pwdInput = document.getElementById('signupPassword');
+  const confirmPwdInput = document.getElementById('signupConfirmPassword');
+  const rulesCard = document.getElementById('passwordRulesCard');
+
+  if (pwdInput && rulesCard) {
+    const ruleLength = document.getElementById('rule-length');
+    const ruleUpper = document.getElementById('rule-upper');
+    const ruleLower = document.getElementById('rule-lower');
+    const ruleNumber = document.getElementById('rule-number');
+    const ruleSpecial = document.getElementById('rule-special');
+    const ruleMatch = document.getElementById('rule-match');
+    const strengthBarFill = document.getElementById('strengthBarFill');
+    const strengthLabel = document.getElementById('strengthLabel');
+
+    function updateRule(elem, isValid) {
+      if (!elem) return;
+      const icon = elem.querySelector('i');
+      if (isValid) {
+        elem.classList.add('valid');
+        elem.classList.remove('invalid');
+        if (icon) {
+          icon.className = 'fa-solid fa-circle-check';
+        }
+      } else {
+        elem.classList.remove('valid');
+        elem.classList.add('invalid');
+        if (icon) {
+          icon.className = 'fa-solid fa-circle-xmark';
+        }
+      }
+    }
+
+    function evaluatePassword() {
+      const pwd = pwdInput.value || '';
+      const confirmPwd = (confirmPwdInput ? confirmPwdInput.value : '') || '';
+
+      const isLength = pwd.length >= 12;
+      const isUpper = /[A-Z]/.test(pwd);
+      const isLower = /[a-z]/.test(pwd);
+      const isNumber = /[0-9]/.test(pwd);
+      const isSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(pwd);
+      const isMatch = (pwd.length > 0 && confirmPwd.length > 0 && pwd === confirmPwd);
+
+      updateRule(ruleLength, isLength);
+      updateRule(ruleUpper, isUpper);
+      updateRule(ruleLower, isLower);
+      updateRule(ruleNumber, isNumber);
+      updateRule(ruleSpecial, isSpecial);
+      updateRule(ruleMatch, isMatch);
+
+      // Calculate score based on the 5 password requirements
+      let score = 0;
+      if (isLength) score++;
+      if (isUpper) score++;
+      if (isLower) score++;
+      if (isNumber) score++;
+      if (isSpecial) score++;
+
+      const percent = Math.round((score / 5) * 100);
+      if (strengthBarFill) {
+        strengthBarFill.style.width = percent + '%';
+        if (score <= 2) {
+          strengthBarFill.style.backgroundColor = 'var(--status-fake)';
+          if (strengthLabel) {
+            strengthLabel.className = 'strength-label weak';
+            strengthLabel.textContent = 'Weak';
+          }
+        } else if (score <= 4) {
+          strengthBarFill.style.backgroundColor = 'var(--status-warning)';
+          if (strengthLabel) {
+            strengthLabel.className = 'strength-label fair';
+            strengthLabel.textContent = 'Fair';
+          }
+        } else {
+          strengthBarFill.style.backgroundColor = 'var(--status-real)';
+          if (strengthLabel) {
+            strengthLabel.className = 'strength-label strong';
+            strengthLabel.textContent = isMatch ? 'Strong & Verified' : 'Strong';
+          }
+        }
+      }
+    }
+
+    pwdInput.addEventListener('input', evaluatePassword);
+    if (confirmPwdInput) {
+      confirmPwdInput.addEventListener('input', evaluatePassword);
+    }
+  }
+
+  // =========================================================================
+  // 7. OTP Expiration Countdown & Resend Cooldown
+  // =========================================================================
+  const otpTimerDisplay = document.getElementById('otpTimerDisplay');
+  const resendBtn = document.getElementById('resendBtn');
+  const resendBtnText = document.getElementById('resendBtnText');
+  const otpCodeInput = document.getElementById('otpCodeInput');
+
+  // Input filter: numeric digits only
+  if (otpCodeInput) {
+    otpCodeInput.addEventListener('input', function () {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+  }
+
+  // Countdown timer for OTP expiration
+  if (otpTimerDisplay) {
+    let expiresIn = parseInt(otpTimerDisplay.getAttribute('data-expires-in'), 10) || 300;
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    const timerInterval = setInterval(function () {
+      expiresIn--;
+      if (expiresIn <= 0) {
+        clearInterval(timerInterval);
+        otpTimerDisplay.textContent = 'Expired';
+        otpTimerDisplay.classList.add('text-danger');
+      } else {
+        otpTimerDisplay.textContent = formatTime(expiresIn);
+        if (expiresIn <= 60) {
+          otpTimerDisplay.classList.add('text-danger');
+        }
+      }
+    }, 1000);
+  }
+
+  // Cooldown timer for resending OTP
+  if (resendBtn && resendBtnText) {
+    let cooldown = parseInt(resendBtn.getAttribute('data-cooldown'), 10) || 0;
+
+    if (cooldown > 0) {
+      resendBtn.disabled = true;
+      resendBtnText.textContent = `Resend Code (${cooldown}s)`;
+
+      const cooldownInterval = setInterval(function () {
+        cooldown--;
+        if (cooldown <= 0) {
+          clearInterval(cooldownInterval);
+          resendBtn.disabled = false;
+          resendBtnText.textContent = 'Resend Code';
+        } else {
+          resendBtnText.textContent = `Resend Code (${cooldown}s)`;
+        }
+      }, 1000);
+    }
+  }
+
 });

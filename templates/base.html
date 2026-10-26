@@ -60,6 +60,11 @@
         <span>History</span>
       </a>
 
+      <a href="{{ url_for('change_password') }}" class="{% if request.endpoint == 'change_password' %}active{% endif %}">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Security</span>
+      </a>
+
       <!-- Authenticated User Profile Chip -->
       <div class="nav-user-chip" title="Signed in as {{ session.username }}">
         <div class="user-avatar">{{ session.username[0]|upper if session.username else 'U' }}</div>
@@ -105,6 +110,11 @@
       <a href="{{ url_for('history') }}" class="{% if request.endpoint == 'history' %}active{% endif %}">
         <i class="fa-solid fa-clock-rotate-left"></i>
         <span>History</span>
+      </a>
+
+      <a href="{{ url_for('change_password') }}" class="{% if request.endpoint == 'change_password' %}active{% endif %}">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Security</span>
       </a>
       <a href="{{ url_for('logout') }}" class="nav-logout">
         <i class="fa-solid fa-right-from-bracket"></i>

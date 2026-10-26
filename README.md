@@ -24,14 +24,20 @@ The application allows users to upload facial images and uses a trained deep lea
 * 🧠 MobileNetV2-based deep learning model
 * ⚡ Fast image prediction
 * 📊 Prediction confidence score
-* 👤 User registration and login
-* 🔐 Session-based authentication
-* 🗃️ SQLite database
-* 📜 Prediction history
-* 🖥️ Responsive web interface
-* 📁 Image upload support
+* 🛡️ **Production-Grade Authentication & Security:**
+  * 📧 **Two-Step Email Verification (2FA)** for signup and login
+  * 🔐 **Scrypt Cryptographic Password Hashing** (zero plaintext storage, automatic migration)
+  * ⏱️ **Cryptographic OTP Tokens** (5-minute expiry, 5-attempt limit, SHA-256 hashed storage)
+  * 🛑 **Account Lockout & Brute-Force Throttling** (15-minute lockout after 5 failed attempts)
+  * 🔑 **Forgot Password & Single-Use Password Reset** via secure email tokens
+  * 🛡️ **CSRF Protection** across all state-changing endpoints
+  * 🍪 **Persistent Session Management** (HttpOnly, SameSite=Lax, Secure across restarts)
+* 🗃️ **SQLite Database with WAL Mode** (high-concurrency, zero database-locked collisions)
+* 📜 Prediction history with filtering and search
+* 🖥️ Responsive luxury dark gold web interface
+* 📁 Image upload support (PNG, JPG, JPEG, WEBP up to 16MB)
 * 📈 Model performance evaluation
-* 🧪 Model and prediction testing
+* 🧪 Comprehensive automated unit and integration test suite
 
 ---
 
@@ -297,9 +303,47 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## 6. Configure Environment Variables
+
+Copy the provided `.env.example` template:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` to configure your settings:
+
+| Variable | Description | Default / Example |
+| -------- | ----------- | ----------------- |
+| `FLASK_SECRET_KEY` | Persistent session signing key | `python -c "import secrets; print(secrets.token_hex(32))"` |
+| `FLASK_ENV` | Environment mode (`development` / `production`) | `development` |
+| `SESSION_COOKIE_SECURE` | Set `true` if serving over HTTPS | `false` |
+| `PORT` | Web server listening port | `5000` |
+| `APP_BASE_URL` | Base URL used in reset emails | `http://localhost:5000` |
+| `SMTP_HOST` | Outgoing SMTP server hostname | `smtp.gmail.com` |
+| `SMTP_PORT` | Outgoing SMTP port (587 or 465) | `587` |
+| `SMTP_USERNAME` | SMTP account email address | `your_email@gmail.com` |
+| `SMTP_PASSWORD` | SMTP password / App password | `your_app_password` |
+| `SMTP_USE_TLS` | Enable STARTTLS | `true` |
+| `MAIL_FROM` | Sender display name & address | `"DeepVision AI Security" <noreply@deepvision.ai>` |
+
+> 💡 **Local Development Notice:** If SMTP credentials are not yet configured, DeepVision AI automatically logs 6-digit verification OTPs and password reset links to the server terminal console for testing. Accounts are never marked as verified without entering the code.
+
+---
+
+# 🧪 Automated Test Suite
+
+Run the full automated authentication, security, and inference test suite:
+
+```bash
+python -m unittest tests/test_auth.py
+```
+
 ---
 
 # ▶️ Running the Application
+
+### Local Development
 
 Start the Flask application:
 
@@ -313,7 +357,13 @@ The application will be available at:
 http://127.0.0.1:5000
 ```
 
-Open the address in your browser.
+### Docker & Docker Compose
+
+Run DeepVision AI in a production-ready container with persistent database and upload volumes:
+
+```bash
+docker compose up -d --build
+```
 
 ---
 

@@ -1,6 +1,6 @@
 # ==========================================================
 # DeepVision AI — Docker Compose Configuration
-# Production-ready multi-container orchestration with persistent volumes
+# Production-ready container orchestration with persistent volumes
 # ==========================================================
 
 services:
@@ -12,11 +12,24 @@ services:
     image: deepvision-ai:latest
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "${PORT:-5000}:5000"
     environment:
-      - SECRET_KEY=deepvision_production_secret_key_luxury_gold_2026
+      # Application Security
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-deepvision_production_secret_key_luxury_gold_2026}
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-false}
       - PORT=5000
       - PYTHONUTF8=1
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost:5000}
+
+      # SMTP Email Configuration (Passed through from .env or container environment)
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USERNAME=${SMTP_USERNAME:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_USE_TLS=${SMTP_USE_TLS:-true}
+      - SMTP_USE_SSL=${SMTP_USE_SSL:-false}
+      - MAIL_FROM=${MAIL_FROM:-}
     volumes:
       # Persistent SQLite database volume to survive container recreation
       - deepvision_db:/app/database

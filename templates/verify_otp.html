@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-wrapper">
+
+  <div class="login-card otp-card">
+
+    <div class="auth-header">
+      <div class="auth-brand-emblem">
+        <div class="emblem-core"></div>
+      </div>
+      <h1>Two-Step <span>Verification</span></h1>
+      <p>
+        {% if purpose == 'signup' %}
+        Enter the one-time verification code sent to activate your account.
+        {% else %}
+        Enter the one-time authorization code sent to complete sign-in.
+        {% endif %}
+      </p>
+      <div class="otp-recipient-badge">
+        <i class="fa-solid fa-envelope"></i>
+        <span>{{ email }}</span>
+      </div>
+    </div>
+
+    <!-- OTP Submission Form -->
+    <form method="POST" action="{{ url_for('verify_otp') }}" id="otpForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="input-group">
+        <label for="otpCodeInput">6-Digit Verification Code</label>
+        <div class="otp-input-container">
+          <input
+            type="text"
+            id="otpCodeInput"
+            name="otp"
+            maxlength="6"
+            pattern="[0-9]{6}"
+            inputmode="numeric"
+            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;"
+            autocomplete="one-time-code"
+            required
+            autofocus>
+        </div>
+      </div>
+
+      <!-- Expiry Countdown & Attempts Status -->
+      <div class="otp-status-banner">
+        <div class="status-item">
+          <i class="fa-regular fa-clock"></i>
+          <span>Expires in: <strong id="otpTimerDisplay" data-expires-in="{{ expires_in_seconds }}">05:00</strong></span>
+        </div>
+        <div class="status-item">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Attempts remaining: <strong class="{% if attempts_remaining <= 2 %}text-danger{% endif %}">{{ attempts_remaining }} / 5</strong></span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary login-btn" id="verifyOtpBtn">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Verify Code & Continue</span>
+      </button>
+
+    </form>
+
+    <!-- Resend Code Section -->
+    <div class="otp-resend-section">
+      <form method="POST" action="{{ url_for('resend_otp') }}" id="resendOtpForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <p class="resend-text">Didn't receive the verification code?</p>
+        <button
+          type="submit"
+          class="btn-secondary resend-btn"
+          id="resendBtn"
+          data-cooldown="{{ resend_cooldown }}">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span id="resendBtnText">Resend Code</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="login-footer">
+      <a href="{{ url_for('login') }}">
+        <i class="fa-solid fa-arrow-left"></i> Return to Sign In
+      </a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

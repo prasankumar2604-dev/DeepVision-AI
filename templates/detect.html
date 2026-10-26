@@ -23,6 +23,7 @@
     method="POST"
     enctype="multipart/form-data"
     class="detect-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <!-- Upload Drop Area (Visible when no file is chosen) -->
     <label class="upload-area" id="uploadArea" for="imageInput">

@@ -35,6 +35,7 @@ model/plots/
 
 # Local Database Files (Database data is managed via persistent volume mount)
 database/*.db
+database/.flask_secret
 
 # Local Uploads (Persisted via Docker volume)
 static/uploads/*
