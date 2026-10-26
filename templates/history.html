@@ -8,11 +8,11 @@
     <!-- Header Section -->
     <div class="history-header">
       <div class="history-title-box">
-        <h1>Detection <span>History</span></h1>
+        <h1>Analysis <span>History</span></h1>
         <p>Complete historical log of all deepfake image forensic evaluations.</p>
       </div>
 
-      <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.65rem 1.35rem; font-size: 0.9rem;">
+      <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.65rem 1.45rem; font-size: 0.92rem;">
         <i class="fa-solid fa-plus"></i>
         <span>New Detection</span>
       </a>
@@ -124,9 +124,9 @@
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.65rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
           <div class="confidence-cell">
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Confidence:</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Confidence:</span>
             <span class="conf-value">{{ item.confidence }}%</span>
           </div>
           <span class="time-cell">{{ item.created_at }}</span>
@@ -136,8 +136,8 @@
     </div>
 
     <!-- No Search Matches Message -->
-    <div id="emptyFilterMsg" style="display: none; text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
-      <i class="fa-solid fa-filter-circle-xmark" style="font-size: 2rem; margin-bottom: 0.75rem; color: var(--gold-muted);"></i>
+    <div id="emptyFilterMsg" style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+      <i class="fa-solid fa-filter-circle-xmark" style="font-size: 2.2rem; margin-bottom: 0.85rem; color: var(--color-cyan);"></i>
       <p>No detection records match your current search or filter criteria.</p>
     </div>
 
@@ -146,15 +146,13 @@
     <!-- Empty History State -->
     <div class="empty-history">
       <div class="empty-history-icon">
-        <i class="fa-solid fa-box-open"></i>
+        <i class="fa-solid fa-database"></i>
       </div>
-      <h2>No Detection Records Found</h2>
-      <p>
-        You haven't performed any deepfake image analyses yet. Upload an image to start evaluating with MobileNetV2.
-      </p>
-      <a href="{{ url_for('detect') }}" class="btn-primary">
+      <h3>No analysis records yet</h3>
+      <p>Upload a suspect portrait or image to evaluate biological consistency and generate your first forensic report.</p>
+      <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.85rem 1.85rem; font-size: 1rem;">
         <i class="fa-solid fa-crosshairs"></i>
-        <span>Launch First Detection</span>
+        <span>Run First Analysis</span>
       </a>
     </div>
 

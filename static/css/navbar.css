@@ -1,15 +1,16 @@
 /* ==========================================================================
-   DeepVision AI — Luxury Dark Gold Global Navigation (Enhanced Sizing)
+   DeepVision AI — Cyber Intelligence Global Navigation
+   Theme: Dark Navy, Electric Blue & Neon Purple Accents
    ========================================================================== */
 
 .navbar, .landing-navbar {
   width: 100%;
   max-width: var(--container-max);
   margin: 1.5rem auto 1.25rem;
-  padding: 1.1rem 2.25rem;
-  background: rgba(25, 26, 29, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  padding: 1rem 2.25rem;
+  background: rgba(8, 13, 27, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   display: flex;
@@ -17,17 +18,17 @@
   justify-content: space-between;
   position: relative;
   z-index: 100;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(22, 139, 255, 0.06);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar:hover, .landing-navbar:hover {
-  border-color: rgba(201, 164, 92, 0.35);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 20px rgba(201, 164, 92, 0.08);
+  border-color: var(--border-accent);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(22, 139, 255, 0.12);
 }
 
 /* ==========================================================================
-   Logo & Wordmark
+   Logo & Cyber Wordmark
    ========================================================================== */
 
 .logo {
@@ -42,40 +43,41 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #1E1F23 0%, #292929 100%);
-  border: 1px solid var(--border-gold-subtle);
+  background: linear-gradient(135deg, #101C33 0%, #0B1428 100%);
+  border: 1px solid var(--border-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 0 12px rgba(201, 164, 92, 0.12);
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 0 14px rgba(34, 211, 238, 0.15);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .logo:hover .logo-icon {
   transform: scale(1.05);
-  border-color: var(--gold-primary);
-  box-shadow: 0 4px 18px rgba(201, 164, 92, 0.3);
+  border-color: var(--color-cyan);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.35), inset 0 0 18px rgba(139, 92, 246, 0.25);
 }
 
-/* Subtle Gold Neural Core Emblem */
+/* Glowing Cyber Neural Core Emblem */
 .logo-icon .core {
   width: 15px;
   height: 15px;
-  background: var(--gold-gradient);
+  background: var(--gradient-primary);
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(230, 201, 130, 0.75);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.85);
   position: relative;
   z-index: 2;
 }
 
 .logo-icon .node {
   position: absolute;
-  width: 7px;
-  height: 7px;
-  background: var(--gold-highlight);
+  width: 6px;
+  height: 6px;
+  background: var(--color-cyan);
   border-radius: 50%;
-  opacity: 0.85;
+  box-shadow: 0 0 8px var(--color-cyan);
+  opacity: 0.9;
 }
 
 .logo-icon .n1 { top: 8px; left: 50%; transform: translateX(-50%); }
@@ -101,7 +103,7 @@
 }
 
 .logo-text h2 span {
-  background: var(--gold-gradient);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -109,127 +111,145 @@
 .logo-text p {
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-cyan);
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   AI Detection Engine Status Pill
+   ========================================================================== */
+
+.engine-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.38rem 0.95rem;
+  border-radius: var(--radius-full);
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  color: var(--color-cyan);
+  font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 0.2rem 0 0 0;
-  line-height: 1;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.12);
+  user-select: none;
+}
+
+.engine-status-pill .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-cyan);
+  animation: pulseCyan 2s infinite;
 }
 
 /* ==========================================================================
    Navigation Links
    ========================================================================== */
 
-nav {
+.navbar nav, .landing-navbar nav {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
-nav a {
+.navbar nav a, .landing-navbar nav a {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.65rem 1.35rem;
-  border-radius: var(--radius-sm);
+  gap: 0.55rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-size: 0.98rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  position: relative;
-  border: 1px solid transparent;
-}
-
-nav a i {
-  font-size: 1.05rem;
-  color: var(--text-muted);
-  transition: color 0.2s ease;
-}
-
-nav a:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
-nav a:hover i {
-  color: var(--gold-highlight);
-}
-
-/* Active Navigation State */
-nav a.active {
-  color: var(--gold-highlight);
-  background: rgba(201, 164, 92, 0.12);
-  border-color: var(--border-gold-subtle);
+  font-size: 0.96rem;
   font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.22s ease;
 }
 
-nav a.active i {
-  color: var(--gold-primary);
+.navbar nav a i, .landing-navbar nav a i {
+  font-size: 1rem;
+  color: var(--text-muted);
+  transition: color 0.22s ease;
 }
 
-/* User Profile Chip */
+.navbar nav a:hover, .landing-navbar nav a:hover {
+  color: var(--color-cyan);
+  background: rgba(22, 139, 255, 0.08);
+}
+
+.navbar nav a:hover i, .landing-navbar nav a:hover i {
+  color: var(--color-cyan);
+}
+
+/* Active Nav Indicator with Cyber Underglow */
+.navbar nav a.active {
+  color: #FFFFFF;
+  background: rgba(22, 139, 255, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 15px rgba(22, 139, 255, 0.2);
+}
+
+.navbar nav a.active i {
+  color: var(--color-cyan);
+}
+
+/* ==========================================================================
+   Authenticated User Profile Chip
+   ========================================================================== */
+
 .nav-user-chip {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.45rem 1.15rem;
-  margin-left: 0.75rem;
-  border-radius: var(--radius-full);
-  background: var(--bg-card);
+  gap: 0.75rem;
+  padding: 0.38rem 0.95rem 0.38rem 0.45rem;
+  background: rgba(16, 28, 51, 0.85);
   border: 1px solid var(--border-color);
-  font-size: 0.92rem;
-  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  margin-left: 0.35rem;
 }
 
-.nav-user-chip .user-avatar {
-  width: 28px;
-  height: 28px;
+.user-avatar {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: var(--gold-gradient);
-  color: #111214;
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  font-size: 0.9rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 800;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
-.nav-user-chip .username-text {
+.username-text {
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--text-primary);
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Nav Logout Button */
-nav a.nav-logout {
-  color: var(--text-muted);
-  border-color: transparent;
+/* Logout Button */
+.nav-logout {
+  color: #94A3B8 !important;
 }
 
-nav a.nav-logout:hover {
-  color: var(--status-fake);
-  background: var(--status-fake-bg);
-  border-color: var(--status-fake-border);
+.nav-logout:hover {
+  color: #F87171 !important;
+  background: rgba(248, 113, 113, 0.1) !important;
 }
 
-nav a.nav-logout:hover i {
-  color: var(--status-fake);
-}
-
-/* Landing Nav CTA */
-.nav-login {
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 0.98rem;
-}
-
-.nav-login:hover {
-  color: var(--gold-highlight);
-}
-
-.nav-btn {
-  padding: 0.65rem 1.55rem;
-  font-size: 0.96rem;
+.nav-logout:hover i {
+  color: #F87171 !important;
 }
 
 /* ==========================================================================
@@ -242,59 +262,56 @@ nav a.nav-logout:hover i {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  padding: 0.6rem 0.85rem;
-  cursor: pointer;
+  padding: 0.55rem 0.85rem;
   font-size: 1.25rem;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .mobile-menu-btn:hover {
-  border-color: var(--gold-primary);
-  color: var(--gold-highlight);
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  box-shadow: var(--glow-cyan);
 }
 
 .mobile-drawer {
-  display: none;
-  flex-direction: column;
   position: absolute;
-  top: calc(100% + 0.75rem);
+  top: calc(100% + 10px);
   left: 0;
   right: 0;
-  background: rgba(25, 26, 29, 0.98);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border: 1px solid var(--border-color);
+  background: rgba(8, 13, 27, 0.96);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
-  gap: 0.55rem;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
-  z-index: 101;
+  display: none;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), var(--glow-md);
+  z-index: 1000;
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mobile-drawer.open {
   display: flex;
-  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mobile-drawer a {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.95rem 1.15rem;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 1.05rem;
-  font-weight: 500;
-  border: 1px solid transparent;
-}
-
-.mobile-drawer a.active {
-  color: var(--gold-highlight);
-  background: rgba(201, 164, 92, 0.12);
-  border-color: var(--border-gold-subtle);
-}
-
-.mobile-drawer a:hover {
-  background: rgba(255, 255, 255, 0.05);
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-md);
   color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mobile-drawer a:hover, .mobile-drawer a.active {
+  background: rgba(22, 139, 255, 0.14);
+  color: var(--color-cyan);
+  border: 1px solid var(--border-color);
 }

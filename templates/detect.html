@@ -3,16 +3,15 @@
 {% block content %}
 <div class="detect-page animate-fade-up">
 
-  <!-- Detection Studio Header -->
+  <!-- Detection Studio Hero Header -->
   <div class="detect-header">
     <div class="studio-badge">
       <i class="fa-solid fa-microchip"></i>
-      <span>MobileNetV2 Neural Engine</span>
+      <span>MOBILENETV2 &bull; NEURAL ANALYSIS ENGINE</span>
     </div>
-    <h1>Deepfake Image <span>Forensic Studio</span></h1>
+    <h1>Deepfake <span>Intelligence Center</span></h1>
     <p>
-      Upload any suspect image or facial portrait. DeepVision AI evaluates synthetic artifacts,
-      frequency distortions, and biological consistency using deep transfer learning.
+      Analyze suspicious images with AI-powered forensic intelligence. Detect potential synthetic imagery using the DeepVision AI neural engine.
     </p>
   </div>
 
@@ -25,7 +24,7 @@
     class="detect-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <!-- Upload Drop Area (Visible when no file is chosen) -->
+    <!-- Large Spacious Upload Drop Area (Visible when no file is chosen) -->
     <label class="upload-area" id="uploadArea" for="imageInput">
       <input
         type="file"
@@ -38,8 +37,8 @@
         <i class="fa-solid fa-cloud-arrow-up"></i>
       </div>
 
-      <div class="upload-title">Drag & drop suspect image here</div>
-      <div class="upload-subtitle">or choose a file from your computer</div>
+      <div class="upload-title">Drop your image for intelligence analysis</div>
+      <div class="upload-subtitle">Drag and drop suspect portrait or browse your device</div>
 
       <div class="browse-pill">
         <i class="fa-solid fa-folder-open"></i>
@@ -53,7 +52,7 @@
       <span>&bull;</span>
       <span><b>Target Resolution:</b> 224 &times; 224 px (Auto-Scaled)</span>
       <span>&bull;</span>
-      <span><b>Maximum File Size:</b> 16MB</span>
+      <span><b>Maximum Upload Size:</b> 16MB</span>
     </div>
 
     <!-- Live Preview Stage (Appears when image is selected) -->
@@ -70,15 +69,15 @@
         </div>
 
         <button type="button" class="remove-file-btn" id="removeFileBtn">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-arrow-rotate-left"></i>
           <span>Change Image</span>
         </button>
       </div>
 
-      <!-- Dynamic Scanning Message during Processing -->
+      <!-- Indeterminate Dynamic Scanning Message during Processing -->
       <div class="scanning-status-banner" id="scanningBanner">
         <span class="spinner"></span>
-        <span>Neural Model Inference in progress... Analyzing facial textures & frequency artifacts...</span>
+        <span>Analyzing image with neural engine... Scanning synthetic artifacts & frequency patterns...</span>
       </div>
     </div>
 
@@ -89,7 +88,7 @@
         class="btn-primary detect-btn"
         type="submit">
         <i class="fa-solid fa-brain"></i>
-        <span>Analyze with DeepVision AI</span>
+        <span>Analyze Image</span>
       </button>
     </div>
 

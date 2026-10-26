@@ -1,5 +1,6 @@
 /* ==========================================================================
-   DeepVision AI — Luxury Dark Gold Authentication Styles (Expanded Sizing)
+   DeepVision AI — Cyber Intelligence Authentication Styles
+   Theme: Dark Navy, Electric Blue & Neon Purple Accents
    ========================================================================== */
 
 .login-wrapper {
@@ -12,15 +13,16 @@
 
 .login-card {
   width: 100%;
-  max-width: 520px;
+  max-width: 530px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   padding: 3.5rem 3.25rem;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 35px rgba(201, 164, 92, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(22, 139, 255, 0.1);
   position: relative;
   overflow: hidden;
   animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(20px);
 }
 
 .login-card::before {
@@ -28,9 +30,9 @@
   position: absolute;
   top: -90px;
   right: -90px;
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, rgba(201, 164, 92, 0.15) 0%, transparent 70%);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 75%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -42,24 +44,30 @@
 }
 
 .auth-brand-emblem {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #1A1B1E 0%, #292929 100%);
-  border: 1px solid var(--border-gold-subtle);
+  background: linear-gradient(135deg, #101C33 0%, #0B1428 100%);
+  border: 1px solid var(--border-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.35rem;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45), inset 0 0 14px rgba(201, 164, 92, 0.15);
+  margin: 0 auto 1.45rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(34, 211, 238, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.auth-brand-emblem:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(22, 139, 255, 0.4), inset 0 0 20px rgba(34, 211, 238, 0.3);
 }
 
 .auth-brand-emblem .emblem-core {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: var(--gold-gradient);
-  box-shadow: 0 0 14px rgba(230, 201, 130, 0.85);
+  background: var(--gradient-primary);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.85);
 }
 
 .auth-header h1 {
@@ -70,7 +78,7 @@
 }
 
 .auth-header h1 span {
-  background: var(--gold-gradient);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -82,7 +90,7 @@
 }
 
 .auth-header p strong {
-  color: var(--gold-highlight);
+  color: var(--color-cyan);
   font-weight: 600;
 }
 
@@ -104,168 +112,111 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.45rem;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.35rem;
+  font-size: 1.05rem;
   transition: color 0.2s ease;
 }
 
 .toggle-password-btn:hover {
-  color: var(--gold-highlight);
+  color: var(--color-cyan);
 }
 
-/* Button & Footer Links */
-.login-btn {
-  width: 100%;
-  margin-top: 1.5rem;
-  padding: 1.15rem;
-  font-size: 1.12rem;
-}
-
-.login-footer {
-  margin-top: 2.25rem;
-  padding-top: 1.65rem;
-  border-top: 1px solid var(--border-subtle);
-  text-align: center;
-  font-size: 0.98rem;
-  color: var(--text-muted);
-}
-
-.login-footer a {
-  color: var(--gold-highlight);
-  font-weight: 600;
-  margin-left: 0.4rem;
-  transition: color 0.2s ease;
-}
-
-.login-footer a:hover {
-  color: #FFFFFF;
-  text-decoration: underline;
-}
-
-/* ==========================================================================
-   Extended DeepVision AI Luxury Authentication Components
-   ========================================================================== */
-
-/* Sub-links in labels (e.g. Forgot Password) */
 .label-with-link {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.label-with-link label {
-  margin-bottom: 0 !important;
+  justify-content: space-between;
 }
 
 .auth-sub-link {
-  font-size: 0.85rem;
-  color: var(--gold-highlight);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  font-size: 0.88rem;
+  color: var(--color-cyan);
 }
 
 .auth-sub-link:hover {
-  color: #FFFFFF;
-  text-decoration: underline;
+  color: var(--color-primary-light);
 }
 
-/* Live Password Rules Card & Checklist */
+/* Password Strength & Security Requirements Checklist */
 .password-rules-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 1.15rem 1.25rem;
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  padding: 1.35rem 1.45rem;
+  margin-bottom: 1.75rem;
 }
 
 .rules-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.65rem;
-  font-size: 0.85rem;
-  font-weight: 600;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .strength-label {
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.2rem 0.55rem;
+  padding: 0.2rem 0.65rem;
   border-radius: var(--radius-xs);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-muted);
-  transition: all 0.3s ease;
 }
 
 .strength-label.weak {
-  color: var(--status-fake);
-  background: var(--status-fake-bg);
+  background: rgba(244, 63, 94, 0.15);
+  color: #FB7185;
 }
 
 .strength-label.fair {
-  color: var(--status-warning);
-  background: var(--status-warning-bg);
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
 }
 
 .strength-label.strong {
-  color: var(--status-real);
-  background: var(--status-real-bg);
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
 }
 
 .strength-bar-track {
   width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  height: 6px;
+  background: #080D1B;
   border-radius: var(--radius-full);
   overflow: hidden;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .strength-bar-fill {
   height: 100%;
   width: 0%;
-  background: var(--status-fake);
   border-radius: var(--radius-full);
-  transition: width 0.35s ease, background-color 0.35s ease;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  background-color: var(--status-fake);
 }
 
 .rules-list {
   list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.45rem;
-}
-
-@media (min-width: 480px) {
-  .rules-list {
-    grid-template-columns: 1fr 1fr;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
 .rule-item {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.8rem;
+  gap: 0.65rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   transition: color 0.2s ease;
 }
 
 .rule-item i {
-  font-size: 0.85rem;
-  color: #555555;
-  transition: all 0.25s ease;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
 }
 
 .rule-item.valid {
@@ -273,10 +224,35 @@
 }
 
 .rule-item.valid i {
-  color: var(--status-real);
-  transform: scale(1.1);
+  color: #34D399;
 }
 
 .rule-item.invalid i {
-  color: var(--status-fake);
+  color: #64748B;
+}
+
+/* Submit Button & Footer */
+.login-btn {
+  width: 100%;
+  padding: 1.05rem 2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.96rem;
+  color: var(--text-secondary);
+}
+
+.login-footer a {
+  color: var(--color-cyan);
+  font-weight: 600;
+  margin-left: 0.35rem;
+}
+
+.login-footer a:hover {
+  color: var(--color-primary-light);
 }

@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="result-container animate-fade-up" style="max-width: 600px; padding: 4rem 1rem; text-align: center;">
+<div class="result-container animate-fade-up" style="max-width: 620px; padding: 4rem 1rem; text-align: center;">
 
-  <div class="card" style="padding: 3.5rem 2.5rem; border-color: var(--border-gold-subtle);">
+  <div class="card" style="padding: 3.5rem 2.5rem; border-color: var(--border-accent); box-shadow: var(--shadow-card), var(--glow-md);">
 
-    <div class="auth-brand-emblem" style="width: 64px; height: 64px; margin: 0 auto 1.5rem;">
-      <div class="emblem-core" style="width: 22px; height: 22px;"></div>
+    <div class="auth-brand-emblem" style="width: 70px; height: 70px; margin: 0 auto 1.5rem;">
+      <div class="emblem-core" style="width: 24px; height: 24px;"></div>
     </div>
 
-    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">DeepVision <span>AI</span></h1>
-    <p style="margin-bottom: 2rem;">Forensic neural image analysis in progress...</p>
+    <h1 style="font-size: 2.1rem; margin-bottom: 0.5rem;">DeepVision <span class="gradient-text">AI</span></h1>
+    <p style="margin-bottom: 2rem; color: var(--text-secondary);">Cyber intelligence forensic analysis in progress...</p>
 
     <!-- Progress Track -->
-    <div class="progress-track" style="height: 8px; margin-bottom: 1.5rem;">
-      <div class="progress-fill" style="width: 100%; background: var(--gold-gradient); animation: goldShimmer 2s infinite;"></div>
+    <div class="progress-track" style="height: 10px; margin-bottom: 1.5rem;">
+      <div class="progress-fill" style="width: 100%; background: var(--gradient-primary); animation: shimmerCyber 2s infinite; box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);"></div>
     </div>
 
-    <div style="font-size: 0.92rem; font-weight: 600; color: var(--gold-highlight); min-height: 24px;">
+    <div style="font-size: 0.95rem; font-weight: 600; color: var(--color-cyan); min-height: 24px; font-family: var(--font-mono);">
       <span id="step">Initializing MobileNetV2 Architecture...</span>
     </div>
 
@@ -27,7 +27,7 @@
 
 <script>
 const steps = [
-  "✔ Loading MobileNetV2 Weights...",
+  "✔ Initializing MobileNetV2 Weights...",
   "✔ Normalizing Pixel Tensors [224, 224]...",
   "✔ Extracting Multi-Scale Facial Features...",
   "✔ Frequency Domain Texture Analysis...",

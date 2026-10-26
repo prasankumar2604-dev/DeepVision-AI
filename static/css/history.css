@@ -1,70 +1,75 @@
 /* ==========================================================================
-   DeepVision AI — Luxury Dark Gold History Analytics Styles (Expanded Sizing)
+   DeepVision AI — Cyber Intelligence History Analytics Styles
+   Theme: Dark Navy, Electric Blue & Neon Purple Accents
    ========================================================================== */
 
 .history-container {
-  max-width: 1360px;
-  margin: 2rem auto 4.5rem;
+  max-width: 1380px;
+  margin: 2rem auto 5rem;
 }
 
 /* ==========================================================================
-   History Header & Filter Toolbar
+   History Card & Header
    ========================================================================== */
 
 .history-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
-  padding: 2.75rem 2.75rem;
-  box-shadow: var(--shadow-card);
+  padding: 3rem;
+  box-shadow: var(--shadow-card), 0 0 40px rgba(22, 139, 255, 0.06);
+  backdrop-filter: blur(16px);
 }
 
 .history-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
   flex-wrap: wrap;
   gap: 1.5rem;
 }
 
 .history-title-box h1 {
-  font-size: clamp(2.2rem, 3vw, 2.75rem);
+  font-size: clamp(2.2rem, 3vw, 2.85rem);
   color: var(--text-primary);
   margin-bottom: 0.45rem;
   letter-spacing: -0.02em;
 }
 
 .history-title-box h1 span {
-  background: var(--gold-gradient);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .history-title-box p {
   color: var(--text-secondary);
-  font-size: 1.05rem;
+  font-size: 1.08rem;
 }
 
-/* Toolbar: Search & Filter Tabs */
+/* ==========================================================================
+   Search & Filter Toolbar
+   ========================================================================== */
+
 .history-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 2.25rem;
   flex-wrap: wrap;
   background: var(--bg-card-elevated);
-  padding: 1.15rem 1.5rem;
+  padding: 1.15rem 1.75rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-color);
 }
 
 .search-box-wrapper {
   position: relative;
   flex: 1;
-  min-width: 260px;
-  max-width: 440px;
+  min-width: 280px;
+  max-width: 460px;
 }
 
 .search-box-wrapper i {
@@ -72,20 +77,27 @@
   left: 1.15rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-muted);
+  color: var(--color-cyan);
   font-size: 1rem;
 }
 
 .history-search-input {
-  padding-left: 2.85rem !important;
+  padding-left: 2.95rem !important;
   font-size: 0.98rem !important;
-  height: 46px;
+  height: 48px;
+  background: #080D1B !important;
+  border-color: var(--border-color) !important;
+}
+
+.history-search-input:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(22, 139, 255, 0.25) !important;
 }
 
 .filter-tabs {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 .filter-tab {
@@ -95,71 +107,71 @@
   color: var(--text-muted);
   font-size: 0.92rem;
   font-weight: 600;
-  padding: 0.55rem 1.25rem;
+  padding: 0.55rem 1.35rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .filter-tab:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(22, 139, 255, 0.08);
 }
 
 .filter-tab.active {
-  background: rgba(201, 164, 92, 0.15);
-  border-color: var(--border-gold-subtle);
-  color: var(--gold-highlight);
+  background: rgba(22, 139, 255, 0.16);
+  border-color: var(--border-accent);
+  color: var(--color-cyan);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
 }
 
 /* ==========================================================================
-   Analytics Table
+   Desktop Forensic Audit Table
    ========================================================================== */
 
 .table-responsive {
   width: 100%;
   overflow-x: auto;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-color);
+  background: #080D1B;
 }
 
 .history-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   text-align: left;
 }
 
 .history-table th {
-  background: #191A1D;
-  color: var(--text-muted);
-  font-size: 0.85rem;
+  padding: 1.15rem 1.5rem;
+  background: #0B1428;
+  color: var(--color-cyan);
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
-  white-space: nowrap;
 }
 
 .history-table td {
-  padding: 1.35rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  font-size: 1rem;
   vertical-align: middle;
-  background: var(--bg-card);
-  transition: background 0.2s ease;
 }
 
-.history-table tbody tr:hover td {
-  background: var(--bg-card-hover);
-}
-
-.history-table tbody tr:last-child td {
+.history-table tr:last-child td {
   border-bottom: none;
 }
 
-/* Image Cell */
+.history-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+  background: rgba(22, 139, 255, 0.05);
+}
+
+/* Thumbnail & Filename Cell */
 .table-img-cell {
   display: flex;
   align-items: center;
@@ -170,51 +182,54 @@
   width: 52px;
   height: 52px;
   border-radius: var(--radius-sm);
-  background: #17181A;
-  border: 1px solid var(--border-color);
   overflow: hidden;
+  border: 1px solid var(--border-accent);
+  background: #050816;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gold-primary);
+  color: var(--text-muted);
 }
 
 .table-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .table-filename {
   font-weight: 600;
+  font-size: 0.95rem;
   color: var(--text-primary);
-  max-width: 340px;
+  max-width: 260px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: var(--font-mono);
 }
 
-/* Confidence Cell */
+/* Confidence Score with Mini-Meter */
 .confidence-cell {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .conf-value {
-  font-family: var(--font-mono);
   font-weight: 700;
-  color: var(--text-primary);
+  font-family: var(--font-mono);
   font-size: 1rem;
-  min-width: 52px;
+  color: var(--text-primary);
+  min-width: 54px;
 }
 
 .conf-mini-bar {
   width: 90px;
-  height: 8px;
-  border-radius: var(--radius-full);
+  height: 6px;
   background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
@@ -223,31 +238,35 @@
   border-radius: var(--radius-full);
 }
 
-.conf-mini-fill.real { background: var(--status-real); }
-.conf-mini-fill.fake { background: var(--status-fake); }
+.conf-mini-fill.real {
+  background: linear-gradient(90deg, #10B981, #22D3EE);
+}
 
-/* Timestamp Cell */
+.conf-mini-fill.fake {
+  background: linear-gradient(90deg, #F43F5E, #FB7185);
+}
+
 .time-cell {
+  font-size: 0.88rem;
   color: var(--text-muted);
-  font-size: 0.9rem;
-  white-space: nowrap;
+  font-family: var(--font-mono);
 }
 
 /* ==========================================================================
-   Mobile Cards (shown on <= 768px)
+   Mobile Responsive Cards Layout (Hidden on Desktop)
    ========================================================================== */
 
 .history-mobile-cards {
   display: none;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 1rem;
 }
 
 .history-mobile-card {
   background: var(--bg-card-elevated);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 1.45rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -259,35 +278,39 @@
   justify-content: space-between;
 }
 
-/* Empty State */
+/* ==========================================================================
+   Empty States
+   ========================================================================== */
+
 .empty-history {
   text-align: center;
   padding: 4.5rem 2rem;
 }
 
 .empty-history-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: rgba(201, 164, 92, 0.1);
-  border: 1px solid var(--border-gold-subtle);
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-lg);
+  background: rgba(22, 139, 255, 0.1);
+  border: 1px solid var(--border-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem;
-  color: var(--gold-highlight);
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: var(--color-cyan);
+  margin: 0 auto 1.75rem;
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.15);
 }
 
-.empty-history h2 {
+.empty-history h3 {
   font-size: 1.45rem;
-  margin-bottom: 0.6rem;
   color: var(--text-primary);
+  margin-bottom: 0.65rem;
 }
 
 .empty-history p {
-  font-size: 1.05rem;
-  max-width: 440px;
-  margin: 0 auto 1.75rem;
   color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 480px;
+  margin: 0 auto 2rem;
 }

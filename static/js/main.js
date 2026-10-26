@@ -1,6 +1,7 @@
 /**
- * DeepVision AI — Luxury Dark Gold Client Interactive System
- * Production-ready, lightweight vanilla JavaScript
+ * DeepVision AI — Cyber Intelligence Client Interactive System
+ * Production-ready, performance-conscious vanilla JavaScript
+ * Theme: Cyber Intelligence | Neon Blue + Purple + Cyan
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -48,7 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
   passwordToggles.forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
-      const input = this.closest('.password-input-wrapper').querySelector('input');
+      const wrapper = this.closest('.password-input-wrapper');
+      if (!wrapper) return;
+      const input = wrapper.querySelector('input');
       const icon = this.querySelector('i');
       if (input) {
         if (input.type === 'password') {
@@ -73,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // =========================================================================
   const flashAlerts = document.querySelectorAll('.flash');
   flashAlerts.forEach(function (alert) {
-    // Add close button if not present
     if (!alert.querySelector('.flash-close-btn')) {
       const closeBtn = document.createElement('button');
       closeBtn.className = 'flash-close-btn';
@@ -117,14 +119,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Validate type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type.toLowerCase())) {
-      alert('Please upload a valid image file (JPG, PNG, JPEG, or WEBP).');
+      alert('Unsupported file format. Please upload a JPG, JPEG, PNG, or WEBP image.');
       if (imageInput) imageInput.value = '';
       return;
     }
 
     // Validate size (max 16MB)
     if (file.size > 16 * 1024 * 1024) {
-      alert('Selected image exceeds the 16MB file limit. Please select a smaller image.');
+      alert('Selected image exceeds the 16MB upload limit. Please select a smaller file.');
       if (imageInput) imageInput.value = '';
       return;
     }
@@ -198,16 +200,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Form submission with real-time laser scan animation
+  // Form submission with indeterminate dynamic AI scanning laser
   if (detectForm) {
     detectForm.addEventListener('submit', function (e) {
       if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
         e.preventDefault();
-        alert('Please select an image first.');
+        alert('Please select an image file to analyze.');
         return;
       }
 
-      // Add laser overlay to the preview wrapper
+      // Add cyber laser overlay to the preview wrapper
       if (previewWrapper && !previewWrapper.querySelector('.scanning-overlay')) {
         const overlay = document.createElement('div');
         overlay.className = 'scanning-overlay';
@@ -215,15 +217,15 @@ document.addEventListener('DOMContentLoaded', function () {
         previewWrapper.appendChild(overlay);
       }
 
-      // Show scanning status banner
+      // Show indeterminate scanning status banner
       if (scanningBanner) {
         scanningBanner.classList.add('active');
       }
 
-      // Update button state with spinner
+      // Update button state with spinner and indeterminate text
       if (detectSubmitBtn) {
         detectSubmitBtn.disabled = true;
-        detectSubmitBtn.innerHTML = '<span class="spinner"></span> Neural Model Inference Running...';
+        detectSubmitBtn.innerHTML = '<span class="spinner"></span> Analyzing image...';
       }
     });
   }

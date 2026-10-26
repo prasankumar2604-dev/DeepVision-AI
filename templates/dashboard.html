@@ -8,7 +8,7 @@
     <div class="hero-text-content">
       <div class="hero-badge">
         <span class="status-dot"></span>
-        <span>Neural Forensic Workspace</span>
+        <span>Cyber Intelligence Workspace</span>
       </div>
       <h1>Welcome back, <span>{{ session.username }}</span></h1>
       <p>
@@ -33,9 +33,9 @@
         <span class="stat-title">Total Analyses</span>
         <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
       </div>
-      <div class="stat-value gold">{{ total_predictions }}</div>
+      <div class="stat-value cyan">{{ total_predictions }}</div>
       <div class="stat-footer">
-        <i class="fa-solid fa-circle-check" style="color: var(--gold-primary);"></i>
+        <i class="fa-solid fa-circle-check" style="color: var(--color-cyan);"></i>
         <span>Lifetime database records</span>
       </div>
     </div>
@@ -70,10 +70,10 @@
         <span class="stat-title">Inference Engine</span>
         <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
       </div>
-      <div class="stat-value" style="font-size: 1.55rem; color: var(--gold-highlight);">MobileNetV2</div>
+      <div class="stat-value" style="font-size: 1.55rem; color: var(--color-cyan);">MobileNetV2</div>
       <div class="stat-footer">
-        <i class="fa-solid fa-bolt" style="color: var(--status-real);"></i>
-        <span>224&times;224 RGB &bull; Stage 2</span>
+        <i class="fa-solid fa-bolt" style="color: var(--color-purple-light);"></i>
+        <span>224&times;224 RGB &bull; Fine-Tuned</span>
       </div>
     </div>
   </section>
@@ -86,9 +86,9 @@
     <div class="analytics-header">
       <div>
         <div class="analytics-title">Forensic Verdict Distribution</div>
-        <div class="analytics-subtitle">Breakdown of authenticated vs synthetic images in your account</div>
+        <div class="analytics-subtitle">Breakdown of authenticated vs synthetic images in your workspace</div>
       </div>
-      <div class="badge badge-gold">{{ total_predictions }} total logged</div>
+      <div class="badge badge-cyber">{{ total_predictions }} total logged</div>
     </div>
 
     <div class="ratio-bar-wrapper">
@@ -163,7 +163,7 @@
         </div>
         <h3>No detections recorded yet</h3>
         <p>Upload a suspect portrait or image to evaluate biological consistency with MobileNetV2.</p>
-        <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.65rem 1.35rem; font-size: 0.9rem;">
+        <a href="{{ url_for('detect') }}" class="btn-primary" style="padding: 0.75rem 1.65rem; font-size: 0.95rem;">
           <i class="fa-solid fa-crosshairs"></i>
           <span>Run First Analysis</span>
         </a>
@@ -178,7 +178,7 @@
           <i class="fa-solid fa-circle-nodes"></i>
           <span>Engine Status</span>
         </h2>
-        <span class="badge badge-gold">Active</span>
+        <span class="badge badge-cyber">Active</span>
       </div>
 
       <ul class="system-status-list">

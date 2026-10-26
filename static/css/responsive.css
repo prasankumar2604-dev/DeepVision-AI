@@ -1,6 +1,7 @@
 /* ==========================================================================
-   DeepVision AI — Luxury Dark Gold Responsive Styles
-   Breakpoints: 1200px, 992px, 768px, 480px (Fluid & Touch-Friendly)
+   DeepVision AI — Cyber Intelligence Responsive Styles
+   Breakpoints: 1200px, 992px, 768px, 480px
+   Theme: Cyber Intelligence | Fluid & Touch-Optimized
    ========================================================================== */
 
 /* 1200px Breakpoint (Laptops & Desktops) */
@@ -20,6 +21,11 @@
 
   .tech-grid {
     grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .dashboard-bottom {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -102,9 +108,13 @@
   .counter-section {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+
+  .engine-status-pill {
+    display: none;
+  }
 }
 
-/* 768px Breakpoint (Tablets Portrait & Mobile Large) */
+/* 768px Breakpoint (Tablets Portrait & Large Phones) */
 @media (max-width: 768px) {
   .navbar nav, .landing-navbar nav {
     display: none;
@@ -119,7 +129,7 @@
   }
 
   .navbar, .landing-navbar {
-    padding: 0.95rem 1.45rem;
+    padding: 0.85rem 1.35rem;
     margin: 1rem auto;
   }
 
@@ -155,7 +165,7 @@
     padding-bottom: 0.35rem;
   }
 
-  /* Switch wide desktop table to card layout on mobile */
+  /* Switch desktop table to card layout on mobile */
   .table-responsive {
     display: none;
   }
@@ -178,11 +188,22 @@
   }
 
   .detect-form {
-    padding: 1.85rem 1.45rem;
+    padding: 2rem 1.35rem;
   }
 
   .upload-area {
-    padding: 3.25rem 1.5rem;
+    min-height: 320px;
+    padding: 3rem 1.25rem;
+  }
+
+  .supported-formats-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .preview-image-wrapper {
+    height: 300px;
   }
 
   .features-grid {
@@ -215,7 +236,7 @@
   }
 
   .navbar, .landing-navbar {
-    padding: 0.85rem 1.15rem;
+    padding: 0.8rem 1rem;
     margin: 0.75rem auto 1.25rem;
     border-radius: var(--radius-lg);
   }
@@ -225,8 +246,8 @@
   }
 
   .logo-icon {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
 
   .hero-stats {
@@ -256,5 +277,19 @@
 
   .counter-section {
     grid-template-columns: 1fr !important;
+  }
+
+  .preview-image-wrapper {
+    height: 250px;
+  }
+
+  .preview-meta-bar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .remove-file-btn {
+    align-self: flex-start;
   }
 }

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DeepVision AI — Neural Deepfake Detection Platform</title>
+  <title>DeepVision AI — Cyber Intelligence & Neural Forensics</title>
 
-  <!-- Google Font: Inter -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -26,7 +26,7 @@
 </head>
 <body>
 
-  <!-- Global Luxury Navigation Bar -->
+  <!-- Cyber Intelligence Navigation Bar -->
   <header class="navbar">
     <a href="{% if session.user_id %}{{ url_for('dashboard') }}{% else %}{{ url_for('home') }}{% endif %}" class="logo" aria-label="DeepVision AI Home">
       <div class="logo-icon">
@@ -38,9 +38,15 @@
       </div>
       <div class="logo-text">
         <h2>DeepVision <span>AI</span></h2>
-        <p>Neural Image Forensics</p>
+        <p>Cyber Intelligence Forensics</p>
       </div>
     </a>
+
+    <!-- AI Detection Engine Status Pill -->
+    <div class="engine-status-pill" title="MobileNetV2 neural inference pipeline active">
+      <span class="pulse-dot"></span>
+      <span>Neural Engine Online</span>
+    </div>
 
     <!-- Desktop Navigation Links -->
     <nav>
@@ -81,7 +87,7 @@
         <i class="fa-solid fa-arrow-right-to-bracket"></i>
         <span>Login</span>
       </a>
-      <a href="{{ url_for('signup') }}" class="btn-primary" style="padding: 0.55rem 1.15rem; font-size: 0.88rem;">
+      <a href="{{ url_for('signup') }}" class="btn-primary" style="padding: 0.55rem 1.25rem; font-size: 0.9rem;">
         <span>Get Started</span>
       </a>
       {% endif %}
@@ -111,7 +117,6 @@
         <i class="fa-solid fa-clock-rotate-left"></i>
         <span>History</span>
       </a>
-
       <a href="{{ url_for('change_password') }}" class="{% if request.endpoint == 'change_password' %}active{% endif %}">
         <i class="fa-solid fa-shield-halved"></i>
         <span>Security</span>
@@ -156,10 +161,10 @@
     {% endblock %}
   </main>
 
-  <!-- Global Luxury Dark Gold Footer -->
+  <!-- Cyber Intelligence Footer -->
   <footer>
     <div class="footer-content">
-      DeepVision AI &copy; 2026 &bull; Neural Image Forensics &bull; Developed by <b>Prasan Kumar</b>
+      DeepVision AI &copy; 2026 &bull; Cyber Intelligence Forensic Engine &bull; Developed by <b>Prasan Kumar</b>
     </div>
   </footer>
 
