@@ -1,7 +1,7 @@
 """
 ====================================================
 DeepVision AI — Comprehensive Security & Auth Tests
-Production-Grade Verification Test Suite
+Direct Authentication & Forensic Model Test Suite
 ====================================================
 """
 
@@ -9,9 +9,6 @@ import os
 import sys
 import unittest
 import tempfile
-import sqlite3
-import json
-from datetime import datetime, timedelta, timezone
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -23,9 +20,6 @@ from auth_utils import (
     normalize_email,
     hash_password,
     verify_and_update_password,
-    generate_otp,
-    hash_otp,
-    verify_otp_hash,
     generate_reset_token,
     hash_reset_token,
     generate_csrf_token,
@@ -37,11 +31,11 @@ from app import app
 
 
 class DeepVisionSecurityUnitTests(unittest.TestCase):
-    """Unit tests for low-level cryptographic functions and input validation."""
+    """Unit tests for cryptographic functions, password policy, and email validation."""
 
     def test_strong_password_validation(self):
         # 1. Too short (< 12 chars)
-        ok, errs = validate_password_strength("Short1!")
+        ok, errs = validate_password_strength("Short1!Aa")
         self.assertFalse(ok)
         self.assertTrue(any("12 characters" in e for e in errs))
 
@@ -56,16 +50,16 @@ class DeepVisionSecurityUnitTests(unittest.TestCase):
         self.assertTrue(any("lowercase" in e for e in errs))
 
         # 4. Missing number
-        ok, errs = validate_password_strength("NoNumbersHere!@#$")
+        ok, errs = validate_password_strength("NoNumbersHere!@#$Aa")
         self.assertFalse(ok)
         self.assertTrue(any("number" in e for e in errs))
 
         # 5. Missing special character
-        ok, errs = validate_password_strength("NoSpecialSymbols1234")
+        ok, errs = validate_password_strength("NoSpecialSymbols1234Aa")
         self.assertFalse(ok)
         self.assertTrue(any("special" in e for e in errs))
 
-        # 6. Meets all production security criteria
+        # 6. Meets all security criteria (minimum 12 chars, upper, lower, number, symbol)
         ok, errs = validate_password_strength("ComplexGold#2026Secure")
         self.assertTrue(ok)
         self.assertEqual(len(errs), 0)
@@ -92,26 +86,6 @@ class DeepVisionSecurityUnitTests(unittest.TestCase):
             ok, _, err = validate_email_syntax(bad)
             self.assertFalse(ok, f"Expected {bad} to fail validation")
             self.assertTrue(len(err) > 0)
-
-    def test_otp_generation_and_hashing(self):
-        otp1 = generate_otp(6)
-        otp2 = generate_otp(6)
-
-        # 6 digits numeric
-        self.assertEqual(len(otp1), 6)
-        self.assertTrue(otp1.isdigit())
-        self.assertEqual(len(otp2), 6)
-        self.assertTrue(otp2.isdigit())
-
-        # Hashing & timing-safe verification
-        email = "analyst@deepvision.ai"
-        purpose = "login_2fa"
-        hashed = hash_otp(otp1, email, purpose)
-
-        self.assertTrue(verify_otp_hash(otp1, hashed, email, purpose))
-        self.assertFalse(verify_otp_hash("000000", hashed, email, purpose))
-        self.assertFalse(verify_otp_hash(otp1, hashed, "wrong@deepvision.ai", purpose))
-        self.assertFalse(verify_otp_hash(otp1, hashed, email, "signup"))
 
     def test_legacy_password_verification_and_upgrade(self):
         # Plaintext backward compatibility
@@ -155,7 +129,6 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
         self.client = app.test_client()
 
     def tearDown(self):
-        # Clean up test database file
         if os.path.exists(self.db_path):
             try:
                 os.remove(self.db_path)
@@ -164,7 +137,7 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
 
     def _get_csrf_token(self):
         """Helper to obtain a valid CSRF token from the session via GET request."""
-        res = self.client.get("/")
+        self.client.get("/")
         with self.client.session_transaction() as sess:
             if "_csrf_token" not in sess:
                 sess["_csrf_token"] = generate_csrf_token()
@@ -177,7 +150,7 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
             self.assertEqual(res.status_code, 302)
             self.assertTrue("/login" in res.headers["Location"])
 
-    def test_signup_validation_and_two_step_verification(self):
+    def test_direct_signup_and_direct_login_flow(self):
         csrf = self._get_csrf_token()
 
         # 1. Weak password rejected
@@ -200,130 +173,49 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
         }, follow_redirects=True)
         self.assertIn(b"Invalid email format", res.data)
 
-        # 3. Valid signup -> triggers OTP creation and redirects to /verify-otp
+        # 3. Direct valid signup (no OTP required)
         res = self.client.post("/signup", data={
             "csrf_token": csrf,
-            "username": "ValidUser",
-            "email": "valid.user@deepvision.ai",
+            "username": "DirectUser",
+            "email": "direct.user@deepvision.ai",
             "password": "StrongPassword#2026",
             "confirm_password": "StrongPassword#2026",
         }, follow_redirects=False)
 
-        self.assertEqual(res.status_code, 302)
-        self.assertTrue("/verify-otp" in res.headers["Location"])
-
-        # Verify that account is NOT yet active in 'users'
-        conn = get_connection(self.db_path)
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE email = 'valid.user@deepvision.ai'")
-        self.assertIsNone(c.fetchone(), "User should NOT be created in users table prior to OTP verification")
-
-        # Verify OTP challenge was stored with hash
-        c.execute("SELECT * FROM otp_challenges WHERE email = 'valid.user@deepvision.ai' AND purpose = 'signup'")
-        challenge = c.fetchone()
-        self.assertIsNotNone(challenge)
-        self.assertFalse(challenge["otp_hash"].isdigit(), "OTP hash must not be stored in plaintext")
-        conn.close()
-
-        # 4. Incorrect OTP submission decrements attempts
-        res = self.client.post("/verify-otp", data={
-            "csrf_token": csrf,
-            "otp": "000000",
-        }, follow_redirects=True)
-        self.assertIn(b"Incorrect verification code", res.data)
-
-        # 5. Correct OTP submission activates account
-        # Simulate knowing the generated OTP by matching its hash or computing known OTP
-        known_otp = "123456"
-        known_hash = hash_otp(known_otp, "valid.user@deepvision.ai", "signup")
-
-        conn = get_connection(self.db_path)
-        c = conn.cursor()
-        c.execute("UPDATE otp_challenges SET otp_hash = ? WHERE id = ?", (known_hash, challenge["id"]))
-        conn.commit()
-        conn.close()
-
-        res = self.client.post("/verify-otp", data={
-            "csrf_token": csrf,
-            "otp": known_otp,
-        }, follow_redirects=False)
-
+        # Redirects straight to login
         self.assertEqual(res.status_code, 302)
         self.assertTrue("/login" in res.headers["Location"])
 
-        # Verify user is now active in database
+        # Verify user is immediately active in database
         conn = get_connection(self.db_path)
         c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE email = 'valid.user@deepvision.ai'")
+        c.execute("SELECT * FROM users WHERE email = 'direct.user@deepvision.ai'")
         user = c.fetchone()
-        self.assertIsNotNone(user)
+        self.assertIsNotNone(user, "User should be created directly in database")
         self.assertEqual(user["is_verified"], 1)
-        self.assertEqual(user["username"], "ValidUser")
+        self.assertEqual(user["username"], "DirectUser")
         conn.close()
 
-    def test_login_flow_requires_2fa_and_session_regeneration(self):
-        csrf = self._get_csrf_token()
-
-        # Create verified user in test database
-        conn = get_connection(self.db_path)
-        c = conn.cursor()
-        pwd_hash = hash_password("StrongPassword#2026")
-        c.execute(
-            "INSERT INTO users (username, email, password, is_verified) VALUES (?, ?, ?, 1)",
-            ("AuthTestUser", "authtest@deepvision.ai", pwd_hash)
-        )
-        conn.commit()
-        conn.close()
-
-        # 1. Incorrect password rejected
+        # 4. Direct login with correct email and password (no 2FA / OTP step)
         res = self.client.post("/login", data={
             "csrf_token": csrf,
-            "email": "authtest@deepvision.ai",
-            "password": "WrongPassword#2026",
-        }, follow_redirects=True)
-        self.assertIn(b"Invalid email or password", res.data)
-
-        # 2. Correct password triggers 2FA challenge and redirects to /verify-otp
-        res = self.client.post("/login", data={
-            "csrf_token": csrf,
-            "email": "authtest@deepvision.ai",
+            "email": "direct.user@deepvision.ai",
             "password": "StrongPassword#2026",
         }, follow_redirects=False)
 
-        self.assertEqual(res.status_code, 302)
-        self.assertTrue("/verify-otp" in res.headers["Location"])
-
-        # Check 2FA challenge created
-        conn = get_connection(self.db_path)
-        c = conn.cursor()
-        c.execute("SELECT * FROM otp_challenges WHERE email = 'authtest@deepvision.ai' AND purpose = 'login_2fa' AND used_at IS NULL")
-        challenge = c.fetchone()
-        self.assertIsNotNone(challenge)
-
-        # Update to known 2FA OTP for testing
-        known_2fa = "654321"
-        c.execute("UPDATE otp_challenges SET otp_hash = ? WHERE id = ?", (hash_otp(known_2fa, "authtest@deepvision.ai", "login_2fa"), challenge["id"]))
-        conn.commit()
-        conn.close()
-
-        # Submit valid 2FA OTP
-        res = self.client.post("/verify-otp", data={
-            "csrf_token": csrf,
-            "otp": known_2fa,
-        }, follow_redirects=False)
-
+        # Grants access directly to dashboard
         self.assertEqual(res.status_code, 302)
         self.assertTrue("/dashboard" in res.headers["Location"])
 
         # Verify session state
         with self.client.session_transaction() as sess:
             self.assertIn("user_id", sess)
-            self.assertEqual(sess["username"], "AuthTestUser")
+            self.assertEqual(sess["username"], "DirectUser")
 
-        # Authenticated user can now access dashboard
+        # Authenticated user can immediately access dashboard
         res = self.client.get("/dashboard")
         self.assertEqual(res.status_code, 200)
-        self.assertIn(b"AuthTestUser", res.data)
+        self.assertIn(b"DirectUser", res.data)
 
     def test_brute_force_lockout_after_five_failed_logins(self):
         csrf = self._get_csrf_token()
@@ -339,7 +231,7 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
 
         # Submit 5 incorrect password attempts
         for i in range(5):
-            res = self.client.post("/login", data={
+            self.client.post("/login", data={
                 "csrf_token": csrf,
                 "email": "lockout@deepvision.ai",
                 "password": f"WrongAttempt{i}!123",
@@ -491,7 +383,6 @@ class DeepVisionIntegrationFlowTests(unittest.TestCase):
             }, content_type="multipart/form-data")
 
         self.assertEqual(res.status_code, 200)
-        # Verify prediction result page is rendered with confidence and verdict
         self.assertTrue(b"Authentic Image (Real)" in res.data or b"Deepfake Detected" in res.data)
         self.assertIn(b"Confidence Score", res.data)
 

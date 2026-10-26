@@ -10,7 +10,6 @@ import re
 import hmac
 import hashlib
 import secrets
-from datetime import datetime, timezone
 from email_validator import validate_email, EmailNotValidError
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -31,7 +30,7 @@ SPECIAL_CHAR_PATTERN = re.compile(r"[!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?`~]")
 
 def validate_password_strength(password: str) -> tuple[bool, list[str]]:
     """
-    Validates that a password satisfies all production security criteria:
+    Validates that a password satisfies all security criteria:
     - Minimum 12 characters
     - At least one uppercase letter
     - At least one lowercase letter
@@ -138,47 +137,13 @@ def validate_email_syntax(email: str) -> tuple[bool, str, str]:
 
 
 # ---------------------------------------------------------------------------
-# Cryptographic One-Time Passwords (OTP)
+# Cryptographic Salts & Password Reset Tokens
 # ---------------------------------------------------------------------------
 
 def get_crypto_salt() -> str:
-    """Retrieves or generates an application-wide salt for hashing OTPs and tokens."""
+    """Retrieves or generates an application-wide salt for hashing reset tokens."""
     return os.environ.get("FLASK_SECRET_KEY") or os.environ.get("SECRET_KEY") or "deepvision_crypto_salt_2026"
 
-
-def generate_otp(length: int = 6) -> str:
-    """
-    Generates a cryptographically secure, unpredictable numeric OTP.
-    Uses secrets.choice to prevent PRNG predictability.
-    """
-    digits = "0123456789"
-    return "".join(secrets.choice(digits) for _ in range(length))
-
-
-def hash_otp(otp: str, email: str, purpose: str) -> str:
-    """
-    Computes a cryptographic SHA-256 HMAC of the OTP bound to the recipient's
-    normalized email and the specific purpose (e.g. 'signup' or 'login_2fa').
-    OTPs are never stored in plaintext.
-    """
-    salt = get_crypto_salt()
-    data = f"{normalize_email(email)}:{purpose}:{otp}:{salt}".encode("utf-8")
-    return hashlib.sha256(data).hexdigest()
-
-
-def verify_otp_hash(provided_otp: str, stored_hash: str, email: str, purpose: str) -> bool:
-    """
-    Timing-safe verification of a user-provided OTP against the stored hash.
-    """
-    if not provided_otp or not stored_hash:
-        return False
-    computed = hash_otp(provided_otp.strip(), email, purpose)
-    return hmac.compare_digest(computed, stored_hash)
-
-
-# ---------------------------------------------------------------------------
-# Password Reset Tokens
-# ---------------------------------------------------------------------------
 
 def generate_reset_token() -> tuple[str, str]:
     """

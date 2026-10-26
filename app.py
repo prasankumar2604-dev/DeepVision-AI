@@ -7,12 +7,10 @@ Production-Grade Authentication & Neural Forensics
 
 import os
 import sys
-import json
 import secrets
 from datetime import datetime, timedelta, timezone
 import math
 from functools import wraps
-import sqlite3
 
 if sys.platform == "win32":
     try:
@@ -29,7 +27,6 @@ from flask import (
     url_for,
     flash,
     session,
-    abort
 )
 from werkzeug.utils import secure_filename
 
@@ -43,9 +40,6 @@ from auth_utils import (
     validate_password_strength,
     hash_password,
     verify_and_update_password,
-    generate_otp,
-    hash_otp,
-    verify_otp_hash,
     generate_reset_token,
     hash_reset_token,
     generate_csrf_token,
@@ -53,12 +47,7 @@ from auth_utils import (
 )
 
 # Email Dispatcher
-from mailer import (
-    send_signup_otp_email,
-    send_login_otp_email,
-    send_password_reset_email,
-    is_smtp_configured,
-)
+from mailer import send_password_reset_email
 
 # AI Prediction Engine
 from predict import predict_image
@@ -213,7 +202,7 @@ def home():
 
 
 # ----------------------------------------------------
-# Signup Flow (Two-Step Email Verification)
+# Signup Flow (Direct Registration)
 # ----------------------------------------------------
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -238,7 +227,7 @@ def signup():
             flash(email_err, "danger")
             return render_template("signup.html")
 
-        # 3. Validate Password Strength
+        # 3. Validate Password Strength (Min 12 chars, upper, lower, number, special)
         is_pwd_strong, pwd_failures = validate_password_strength(password)
         if not is_pwd_strong:
             for failure in pwd_failures:
@@ -253,323 +242,36 @@ def signup():
         conn = get_db()
         cursor = conn.cursor()
 
-        # 5. Check if verified user exists with this email
-        cursor.execute("SELECT id, is_verified FROM users WHERE email = ?", (email,))
+        # 5. Check if user already exists
+        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
         existing_user = cursor.fetchone()
 
-        if existing_user and existing_user["is_verified"] == 1:
+        if existing_user:
             conn.close()
-            # Generic warning to prevent enumeration while guiding user
             flash("An account with this email is already registered. Please sign in.", "warning")
             return redirect(url_for("login"))
 
-        # 6. Rate-Limit Check on OTP Generation (60-second cooldown per email)
-        cursor.execute(
-            """
-            SELECT created_at FROM otp_challenges
-            WHERE email = ? AND purpose = 'signup' AND used_at IS NULL
-            ORDER BY created_at DESC LIMIT 1
-            """,
-            (email,)
-        )
-        last_challenge = cursor.fetchone()
-        if last_challenge:
-            last_created = parse_db_time(last_challenge["created_at"])
-            if last_created:
-                seconds_elapsed = (utc_now() - last_created).total_seconds()
-                if seconds_elapsed < 60:
-                    wait_sec = int(60 - seconds_elapsed)
-                    conn.close()
-                    flash(f"Please wait {wait_sec} second(s) before requesting a new verification code.", "warning")
-                    session["pending_otp_email"] = email
-                    session["pending_otp_purpose"] = "signup"
-                    return redirect(url_for("verify_otp"))
-
-        # Invalidate any prior unused signup challenges for this email
-        cursor.execute(
-            "UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE email = ? AND purpose = 'signup' AND used_at IS NULL",
-            (email,)
-        )
-
-        # 7. Generate Cryptographically Secure OTP
-        otp = generate_otp(6)
-        otp_hashed = hash_otp(otp, email, "signup")
+        # 6. Securely Hash Password and Create Account Immediately
         pwd_hash = hash_password(password)
 
-        expires_at = format_db_time(utc_now() + timedelta(minutes=5))
-        pending_metadata = json.dumps({"username": username, "password_hash": pwd_hash})
-
         cursor.execute(
             """
-            INSERT INTO otp_challenges (email, otp_hash, purpose, expires_at, metadata)
-            VALUES (?, ?, 'signup', ?, ?)
+            INSERT INTO users (username, email, password, is_verified)
+            VALUES (?, ?, ?, 1)
             """,
-            (email, otp_hashed, expires_at, pending_metadata)
+            (username, email, pwd_hash)
         )
         conn.commit()
         conn.close()
 
-        # 8. Dispatch OTP Email
-        send_signup_otp_email(email, otp)
-
-        # 9. Store Pending Verification Context in Session
-        session["pending_otp_email"] = email
-        session["pending_otp_purpose"] = "signup"
-
-        if is_smtp_configured():
-            flash(f"A 6-digit verification code has been dispatched to {email}. Please enter it below.", "info")
-        else:
-            flash(
-                "A 6-digit verification code has been generated. (Note: SMTP is not configured on this server; check your terminal console for the development code).",
-                "info"
-            )
-
-        return redirect(url_for("verify_otp"))
+        flash("Account created successfully! Please sign in with your credentials.", "success")
+        return redirect(url_for("login"))
 
     return render_template("signup.html")
 
 
 # ----------------------------------------------------
-# OTP Verification (Signup Activation & Login 2FA)
-# ----------------------------------------------------
-
-@app.route("/verify-otp", methods=["GET", "POST"])
-def verify_otp():
-    email = session.get("pending_otp_email")
-    purpose = session.get("pending_otp_purpose")
-
-    if not email or not purpose:
-        flash("No pending verification session. Please sign in or register.", "warning")
-        return redirect(url_for("login"))
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT * FROM otp_challenges
-        WHERE email = ? AND purpose = ? AND used_at IS NULL
-        ORDER BY created_at DESC LIMIT 1
-        """,
-        (email, purpose)
-    )
-    challenge = cursor.fetchone()
-
-    if not challenge:
-        conn.close()
-        flash("No active verification code found or code has already been used. Please request a new code.", "warning")
-        return render_template("verify_otp.html", email=email, purpose=purpose, expires_in_seconds=0, attempts_remaining=0, resend_cooldown=0)
-
-    # Calculate Expiry and Cooldown Durations
-    expires_at = parse_db_time(challenge["expires_at"])
-    now = utc_now()
-    expires_in_seconds = max(0, int((expires_at - now).total_seconds())) if expires_at else 0
-
-    created_at = parse_db_time(challenge["created_at"])
-    elapsed_seconds = (now - created_at).total_seconds() if created_at else 999
-    resend_cooldown = max(0, int(60 - elapsed_seconds))
-
-    max_attempts = challenge["max_attempts"]
-    attempts_taken = challenge["attempts"]
-    attempts_remaining = max(0, max_attempts - attempts_taken)
-
-    if request.method == "POST":
-        user_otp = request.form.get("otp", "").strip()
-
-        # A. Check Expiry
-        if expires_in_seconds <= 0:
-            cursor.execute("UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE id = ?", (challenge["id"],))
-            conn.commit()
-            conn.close()
-            flash("Verification code has expired (codes expire after 5 minutes). Please click 'Resend Code'.", "danger")
-            return redirect(url_for("verify_otp"))
-
-        # B. Check Attempts
-        if attempts_taken >= max_attempts:
-            cursor.execute("UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE id = ?", (challenge["id"],))
-            conn.commit()
-            conn.close()
-            flash("Maximum attempts exceeded. This verification code has been invalidated for your security.", "danger")
-            return redirect(url_for("verify_otp"))
-
-        # C. Verify OTP Cryptographic Hash
-        is_otp_correct = verify_otp_hash(user_otp, challenge["otp_hash"], email, purpose)
-
-        if not is_otp_correct:
-            new_attempts = attempts_taken + 1
-            cursor.execute("UPDATE otp_challenges SET attempts = ? WHERE id = ?", (new_attempts, challenge["id"]))
-            conn.commit()
-
-            remaining_now = max(0, max_attempts - new_attempts)
-            if remaining_now == 0:
-                cursor.execute("UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE id = ?", (challenge["id"],))
-                conn.commit()
-                conn.close()
-                flash("Incorrect verification code. Maximum attempts reached. This code has been invalidated.", "danger")
-            else:
-                conn.close()
-                flash(f"Incorrect verification code. {remaining_now} attempt(s) remaining.", "danger")
-            return redirect(url_for("verify_otp"))
-
-        # D. OTP Is Correct! Mark As Used
-        cursor.execute("UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE id = ?", (challenge["id"],))
-
-        if purpose == "signup":
-            # Activate or Create Account
-            metadata_str = challenge["metadata"] or "{}"
-            try:
-                reg_data = json.loads(metadata_str)
-            except Exception:
-                reg_data = {}
-
-            username = reg_data.get("username", "User")
-            password_hash = reg_data.get("password_hash")
-
-            cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
-            existing = cursor.fetchone()
-
-            if existing:
-                cursor.execute(
-                    """
-                    UPDATE users
-                    SET username = ?, password = ?, is_verified = 1, failed_login_attempts = 0, locked_until = NULL
-                    WHERE id = ?
-                    """,
-                    (username, password_hash, existing["id"])
-                )
-            else:
-                cursor.execute(
-                    """
-                    INSERT INTO users (username, email, password, is_verified)
-                    VALUES (?, ?, ?, 1)
-                    """,
-                    (username, email, password_hash)
-                )
-
-            conn.commit()
-            conn.close()
-
-            session.pop("pending_otp_email", None)
-            session.pop("pending_otp_purpose", None)
-
-            flash("Email verified successfully! Your DeepVision AI account is active. Please sign in.", "success")
-            return redirect(url_for("login"))
-
-        elif purpose == "login_2fa":
-            # Complete 2FA Sign-In
-            cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-            user = cursor.fetchone()
-
-            if not user:
-                conn.close()
-                flash("User account not found.", "danger")
-                return redirect(url_for("login"))
-
-            # Reset failed login counts and lockouts
-            cursor.execute("UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = ?", (user["id"],))
-            conn.commit()
-            conn.close()
-
-            # Session Fixation Defense: Regenerate session
-            user_id = user["id"]
-            username = user["username"]
-
-            session.clear()
-            session["user_id"] = user_id
-            session["username"] = username
-            session["_csrf_token"] = generate_csrf_token()
-            session.permanent = True
-
-            flash(f"Welcome back, {username}! Sign-in authorization confirmed.", "success")
-            return redirect(url_for("dashboard"))
-
-    conn.close()
-    return render_template(
-        "verify_otp.html",
-        email=email,
-        purpose=purpose,
-        expires_in_seconds=expires_in_seconds,
-        attempts_remaining=attempts_remaining,
-        resend_cooldown=resend_cooldown
-    )
-
-
-# ----------------------------------------------------
-# Resend OTP Code
-# ----------------------------------------------------
-
-@app.route("/resend-otp", methods=["POST"])
-def resend_otp():
-    email = session.get("pending_otp_email")
-    purpose = session.get("pending_otp_purpose")
-
-    if not email or not purpose:
-        flash("Verification session has expired. Please sign in again.", "warning")
-        return redirect(url_for("login"))
-
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # Rate-Limit Cooldown Check (60 seconds)
-    cursor.execute(
-        """
-        SELECT created_at, metadata FROM otp_challenges
-        WHERE email = ? AND purpose = ?
-        ORDER BY created_at DESC LIMIT 1
-        """,
-        (email, purpose)
-    )
-    last_challenge = cursor.fetchone()
-
-    metadata = "{}"
-    if last_challenge:
-        metadata = last_challenge["metadata"] or "{}"
-        last_created = parse_db_time(last_challenge["created_at"])
-        if last_created:
-            elapsed = (utc_now() - last_created).total_seconds()
-            if elapsed < 60:
-                conn.close()
-                wait_sec = int(60 - elapsed)
-                flash(f"Please wait {wait_sec} second(s) before requesting a new code.", "warning")
-                return redirect(url_for("verify_otp"))
-
-    # Invalidate previous unused challenges
-    cursor.execute(
-        "UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE email = ? AND purpose = ? AND used_at IS NULL",
-        (email, purpose)
-    )
-
-    # Generate fresh OTP
-    otp = generate_otp(6)
-    otp_hashed = hash_otp(otp, email, purpose)
-    expires_at = format_db_time(utc_now() + timedelta(minutes=5))
-
-    cursor.execute(
-        """
-        INSERT INTO otp_challenges (email, otp_hash, purpose, expires_at, metadata)
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        (email, otp_hashed, purpose, expires_at, metadata)
-    )
-    conn.commit()
-    conn.close()
-
-    # Dispatch via Email
-    if purpose == "signup":
-        send_signup_otp_email(email, otp)
-    else:
-        send_login_otp_email(email, otp)
-
-    if is_smtp_configured():
-        flash("A new 6-digit verification code has been dispatched to your email.", "info")
-    else:
-        flash("A new verification code has been generated. (Check server console for local development code).", "info")
-
-    return redirect(url_for("verify_otp"))
-
-
-# ----------------------------------------------------
-# Login (Password Verification + 2FA Step)
+# Login (Direct Authentication)
 # ----------------------------------------------------
 
 @app.route("/login", methods=["GET", "POST"])
@@ -590,13 +292,11 @@ def login():
         conn = get_db()
         cursor = conn.cursor()
 
-        # Record attempt for IP/Email security tracking
         client_ip = request.remote_addr or "127.0.0.1"
 
         cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         user = cursor.fetchone()
 
-        # Account Enumeration Protection: Generic error message on failure
         GENERIC_LOGIN_ERROR = "Invalid email or password."
 
         if not user:
@@ -622,7 +322,6 @@ def login():
         is_pwd_correct, needs_rehash = verify_and_update_password(user["password"], password)
 
         if not is_pwd_correct:
-            # Increment failed attempts
             new_failed = (user["failed_login_attempts"] or 0) + 1
             if new_failed >= 5:
                 lock_time = format_db_time(utc_now() + timedelta(minutes=15))
@@ -655,47 +354,8 @@ def login():
             cursor.execute("UPDATE users SET password = ? WHERE id = ?", (upgraded_hash, user["id"]))
             conn.commit()
 
-        # Check Account Verification Status
-        if user["is_verified"] != 1:
-            # User has not completed email verification! Issue signup OTP
-            otp = generate_otp(6)
-            otp_hashed = hash_otp(otp, email, "signup")
-            expires_at = format_db_time(utc_now() + timedelta(minutes=5))
-
-            cursor.execute(
-                """
-                INSERT INTO otp_challenges (email, otp_hash, purpose, expires_at, metadata)
-                VALUES (?, ?, 'signup', ?, ?)
-                """,
-                (email, otp_hashed, expires_at, json.dumps({"username": user["username"], "password_hash": user["password"]}))
-            )
-            conn.commit()
-            conn.close()
-
-            send_signup_otp_email(email, otp)
-            session["pending_otp_email"] = email
-            session["pending_otp_purpose"] = "signup"
-
-            flash("Your email address is unverified. We have sent a verification code to complete your activation.", "warning")
-            return redirect(url_for("verify_otp"))
-
-        # Verified Account -> Trigger Two-Factor Authentication (2FA)
-        otp = generate_otp(6)
-        otp_hashed = hash_otp(otp, email, "login_2fa")
-        expires_at = format_db_time(utc_now() + timedelta(minutes=5))
-
-        # Invalidate any older login OTPs
-        cursor.execute(
-            "UPDATE otp_challenges SET used_at = CURRENT_TIMESTAMP WHERE email = ? AND purpose = 'login_2fa' AND used_at IS NULL",
-            (email,)
-        )
-        cursor.execute(
-            """
-            INSERT INTO otp_challenges (email, otp_hash, purpose, expires_at)
-            VALUES (?, ?, 'login_2fa', ?)
-            """,
-            (email, otp_hashed, expires_at)
-        )
+        # Reset failed login counts and lockouts
+        cursor.execute("UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = ?", (user["id"],))
         cursor.execute(
             "INSERT INTO login_attempts (ip_address, email, success) VALUES (?, ?, 1)",
             (client_ip, email)
@@ -703,18 +363,18 @@ def login():
         conn.commit()
         conn.close()
 
-        # Dispatch 2FA code
-        send_login_otp_email(email, otp)
+        # Session Fixation Defense: Regenerate session & log in directly
+        user_id = user["id"]
+        username = user["username"]
 
-        session["pending_otp_email"] = email
-        session["pending_otp_purpose"] = "login_2fa"
+        session.clear()
+        session["user_id"] = user_id
+        session["username"] = username
+        session["_csrf_token"] = generate_csrf_token()
+        session.permanent = True
 
-        if is_smtp_configured():
-            flash("Two-step verification required. A 6-digit code has been dispatched to your email.", "info")
-        else:
-            flash("Two-step verification code generated. (Check server terminal console for development OTP).", "info")
-
-        return redirect(url_for("verify_otp"))
+        flash(f"Welcome back, {username}!", "success")
+        return redirect(url_for("dashboard"))
 
     return render_template("login.html")
 
@@ -738,10 +398,10 @@ def forgot_password():
         conn = get_db()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT id, email, is_verified FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT id, email FROM users WHERE email = ?", (email,))
         user = cursor.fetchone()
 
-        if user and user["is_verified"] == 1:
+        if user:
             # Generate single-use reset token
             raw_token, token_hash = generate_reset_token()
             expires_at = format_db_time(utc_now() + timedelta(minutes=15))

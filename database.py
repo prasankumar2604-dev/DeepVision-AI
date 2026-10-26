@@ -52,7 +52,7 @@ def create_database(db_path=None):
     Idempotent schema initialization and migration runner:
     1. Creates all core and security tables if they do not exist.
     2. Safely migrates existing schemas without dropping tables or losing data.
-    3. Upgrades existing users to is_verified=1 so existing accounts continue working.
+    3. Ensures all users are marked active and verified.
     4. Automatically upgrades legacy plaintext passwords to secure modern hashes.
     """
     conn = get_connection(db_path)
@@ -65,6 +65,10 @@ def create_database(db_path=None):
         username TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
+        is_verified INTEGER DEFAULT 1,
+        failed_login_attempts INTEGER DEFAULT 0,
+        locked_until TIMESTAMP DEFAULT NULL,
+        password_changed_at TIMESTAMP DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """)
@@ -82,25 +86,8 @@ def create_database(db_path=None):
     );
     """)
 
-    # 3. OTP Challenges Table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS otp_challenges (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL,
-        otp_hash TEXT NOT NULL,
-        purpose TEXT NOT NULL,
-        attempts INTEGER DEFAULT 0,
-        max_attempts INTEGER DEFAULT 5,
-        expires_at TIMESTAMP NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        used_at TIMESTAMP DEFAULT NULL,
-        metadata TEXT
-    );
-    """)
-    cursor.execute("""
-    CREATE INDEX IF NOT EXISTS idx_otp_email_purpose 
-    ON otp_challenges(email, purpose);
-    """)
+    # 3. Safely drop deprecated otp_challenges table if it exists
+    cursor.execute("DROP TABLE IF EXISTS otp_challenges;")
 
     # 4. Password Resets Table
     cursor.execute("""
@@ -141,12 +128,10 @@ def create_database(db_path=None):
     existing_cols = {row["name"] for row in cursor.fetchall()}
 
     if "is_verified" not in existing_cols:
-        cursor.execute("ALTER TABLE users ADD COLUMN is_verified INTEGER DEFAULT 0;")
-        cursor.execute("UPDATE users SET is_verified = 1;")
-    else:
-        # Ensure any existing users from before 2FA implementation are marked verified
-        # so legacy accounts are not inadvertently locked out
-        cursor.execute("UPDATE users SET is_verified = 1 WHERE is_verified = 0 AND id <= 100;")
+        cursor.execute("ALTER TABLE users ADD COLUMN is_verified INTEGER DEFAULT 1;")
+    
+    # Ensure all existing users are marked active/verified
+    cursor.execute("UPDATE users SET is_verified = 1 WHERE is_verified = 0 OR is_verified IS NULL;")
 
     if "failed_login_attempts" not in existing_cols:
         cursor.execute("ALTER TABLE users ADD COLUMN failed_login_attempts INTEGER DEFAULT 0;")
@@ -156,7 +141,7 @@ def create_database(db_path=None):
 
     if "password_changed_at" not in existing_cols:
         cursor.execute("ALTER TABLE users ADD COLUMN password_changed_at TIMESTAMP DEFAULT NULL;")
-        cursor.execute("UPDATE users SET password_changed_at = CURRENT_TIMESTAMP;")
+        cursor.execute("UPDATE users SET password_changed_at = CURRENT_TIMESTAMP WHERE password_changed_at IS NULL;")
 
     # ----------------------------------------------------
     # Migrate any legacy plaintext passwords to secure hashes
@@ -167,7 +152,6 @@ def create_database(db_path=None):
     for user_row in all_users:
         stored_pwd = user_row["password"]
         if not stored_pwd.startswith(("scrypt:", "pbkdf2:", "argon2:")):
-            # Plaintext password detected! Hash it with modern scrypt
             hashed = hash_password(stored_pwd)
             cursor.execute(
                 "UPDATE users SET password = ? WHERE id = ?;",

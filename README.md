@@ -25,9 +25,9 @@ The application allows users to upload facial images and uses a trained deep lea
 * ⚡ Fast image prediction
 * 📊 Prediction confidence score
 * 🛡️ **Production-Grade Authentication & Security:**
-  * 📧 **Two-Step Email Verification (2FA)** for signup and login
-  * 🔐 **Scrypt Cryptographic Password Hashing** (zero plaintext storage, automatic migration)
-  * ⏱️ **Cryptographic OTP Tokens** (5-minute expiry, 5-attempt limit, SHA-256 hashed storage)
+  * 🔐 **Direct Secure Authentication** (no OTP required to sign up or log in)
+  * 🛡️ **Strong Password Policy** (minimum 12 characters, uppercase, lowercase, number, special symbol)
+  * 🔒 **Scrypt Cryptographic Password Hashing** (zero plaintext storage, automatic migration)
   * 🛑 **Account Lockout & Brute-Force Throttling** (15-minute lockout after 5 failed attempts)
   * 🔑 **Forgot Password & Single-Use Password Reset** via secure email tokens
   * 🛡️ **CSRF Protection** across all state-changing endpoints

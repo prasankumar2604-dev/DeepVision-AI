@@ -1,7 +1,7 @@
 """
 ====================================================
 DeepVision AI — Secure Email Dispatcher
-SMTP Delivery Engine with Luxury HTML Templates
+SMTP Delivery Engine for Password Reset
 ====================================================
 """
 
@@ -17,6 +17,26 @@ if sys.platform == "win32":
         sys.stderr.reconfigure(encoding="utf-8")
     except Exception:
         pass
+
+
+def load_dotenv_if_present():
+    """Lightweight .env parser that automatically loads key=value pairs into os.environ."""
+    env_file = os.path.join(os.path.dirname(__file__), ".env")
+    if os.path.exists(env_file):
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k = k.strip()
+                        v = v.strip().strip("'\"")
+                        if k and k not in os.environ:
+                            os.environ[k] = v
+        except Exception:
+            pass
+
+load_dotenv_if_present()
 
 
 def get_smtp_config() -> dict:
@@ -46,9 +66,14 @@ def get_smtp_config() -> dict:
 
 
 def is_smtp_configured() -> bool:
-    """Returns True if minimum required SMTP settings are populated."""
+    """Returns True if minimum required SMTP settings are populated and not placeholders."""
     cfg = get_smtp_config()
-    return bool(cfg["host"] and cfg["username"] and cfg["password"])
+    is_placeholder = (
+        "your_email" in cfg["username"].lower()
+        or "your_16_char" in cfg["password"].lower()
+        or "example.com" in cfg["username"].lower()
+    )
+    return bool(cfg["host"] and cfg["username"] and cfg["password"] and not is_placeholder)
 
 
 def missing_smtp_variables() -> list[str]:
@@ -85,7 +110,7 @@ def send_email(to_email: str, subject: str, html_body: str, text_body: str) -> t
         print("📜 Plain-Text Message:")
         print(text_body.strip())
         print("=" * 70 + "\n")
-        return False, f"SMTP credentials not configured (missing: {missing_vars}). Check server console for code in local development."
+        return False, f"SMTP credentials not configured (missing: {missing_vars}). Check server console for link in local development."
 
     # Construct MIME Message
     msg = MIMEMultipart("alternative")
@@ -194,31 +219,6 @@ def _build_luxury_email_layout(title: str, preheader: str, content_html: str) ->
       margin-top: 0;
       margin-bottom: 16px;
     }}
-    .otp-box {{
-      background: #17181A;
-      border: 1px solid rgba(201, 164, 92, 0.4);
-      border-radius: 14px;
-      padding: 22px;
-      text-align: center;
-      margin: 28px 0;
-      box-shadow: 0 0 24px rgba(201, 164, 92, 0.08);
-    }}
-    .otp-code {{
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-      font-size: 38px;
-      letter-spacing: 0.25em;
-      font-weight: 800;
-      color: #E6C982;
-      display: block;
-      margin-left: 0.25em;
-    }}
-    .otp-sub {{
-      font-size: 12px;
-      color: #858585;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }}
     .action-btn {{
       display: inline-block;
       background: linear-gradient(135deg, #C9A45C 0%, #E6C982 50%, #C9A45C 100%);
@@ -270,68 +270,6 @@ def _build_luxury_email_layout(title: str, preheader: str, content_html: str) ->
   </div>
 </body>
 </html>"""
-
-
-def send_signup_otp_email(to_email: str, otp: str) -> tuple[bool, str]:
-    """Sends account activation verification OTP email."""
-    subject = f"{otp} is your DeepVision AI verification code"
-    preheader = f"Verify your email address with one-time code {otp}."
-
-    content_html = f"""
-      <h2>Verify Your Email Address</h2>
-      <p>Thank you for signing up for <strong>DeepVision AI</strong>. To complete your account activation and confirm your email ownership, enter the verification code below:</p>
-      
-      <div class="otp-box">
-        <span class="otp-code">{otp}</span>
-        <div class="otp-sub">One-Time Verification Code (Valid for 5 minutes)</div>
-      </div>
-      
-      <div class="security-notice">
-        <strong>Security Notice:</strong> This code is valid for <strong>5 minutes</strong> and allows a maximum of 5 attempts. Never share this code with anyone. DeepVision AI staff will never ask for your code.
-      </div>
-    """
-
-    text_body = f"""DeepVision AI — Email Verification
-
-Your one-time email verification code is: {otp}
-
-This code expires in 5 minutes.
-Enter this code in the DeepVision AI verification screen to activate your account.
-
-If you did not request this account registration, please ignore this email.
-"""
-
-    return send_email(to_email, subject, _build_luxury_email_layout("DeepVision AI — Verify Email", preheader, content_html), text_body)
-
-
-def send_login_otp_email(to_email: str, otp: str) -> tuple[bool, str]:
-    """Sends two-factor login verification OTP email."""
-    subject = f"{otp} is your DeepVision AI login authorization code"
-    preheader = f"Authorize your DeepVision AI sign-in with 2FA code {otp}."
-
-    content_html = f"""
-      <h2>Two-Factor Sign-In Authorization</h2>
-      <p>A sign-in attempt was initiated for your <strong>DeepVision AI</strong> account. To complete authentication, please enter the one-time authorization code below:</p>
-      
-      <div class="otp-box">
-        <span class="otp-code">{otp}</span>
-        <div class="otp-sub">Login Authorization Code (Valid for 5 minutes)</div>
-      </div>
-      
-      <div class="security-notice">
-        <strong>Security Notice:</strong> If you did not initiate this login attempt, someone may know your password. We strongly advise resetting your password immediately after checking your account activity.
-      </div>
-    """
-
-    text_body = f"""DeepVision AI — Two-Factor Login Authorization
-
-Your one-time sign-in authorization code is: {otp}
-
-This code expires in 5 minutes and is single-use.
-If you did not attempt to sign in, please secure your account immediately.
-"""
-
-    return send_email(to_email, subject, _build_luxury_email_layout("DeepVision AI — Sign-In Authorization", preheader, content_html), text_body)
 
 
 def send_password_reset_email(to_email: str, reset_url: str) -> tuple[bool, str]:
